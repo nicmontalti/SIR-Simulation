@@ -13,6 +13,12 @@ class Evolution
 
 class Person
 {
+  int a;
+
+ public:
+  Person(int n = 0) : a{n}
+  {
+  }
 };
 
 #endif
