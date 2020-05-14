@@ -17,9 +17,16 @@ struct Position
   double y;
 };
 
+struct Velocity
+{
+  double vx;
+  double vy;
+};
+
 struct Person
 {
   Position position;
+  Velocity velocity;
 };
 
 #endif
