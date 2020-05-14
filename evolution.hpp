@@ -11,14 +11,15 @@ class Evolution
   }
 };
 
-class Person
+struct Position
 {
-  int a;
+  double x;
+  double y;
+};
 
- public:
-  Person(int n = 0) : a{n}
-  {
-  }
+struct Person
+{
+  Position position;
 };
 
 #endif
