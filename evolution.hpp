@@ -1,12 +1,22 @@
 #ifndef EVOLUTION_HPP
 #define EVOLUTION_HPP
 
-class Evolution
+class Motion
 {
   int a;
 
  public:
-  Evolution(int n = 0) : a{n}
+  Motion(int n = 0) : a{n}
+  {
+  }
+};
+
+class Infection
+{
+  int a;
+
+ public:
+  Infection(int n = 0) : a{n}
   {
   }
 };

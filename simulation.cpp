@@ -20,18 +20,27 @@ bool Simulation::check_everyone_position()
 
 Simulation::Simulation(int size,
                        SIRGroups const& sir_groups,
-                       Evolution const& evolution)
-    : size_{size}, sir_groups_{sir_groups}, evolution_{evolution}
+                       Motion const& motion,
+                       Infection const& infection)
+    : size_{size}
+    , sir_groups_{sir_groups}
+    , motion_{motion}
+    , infection_{infection}
 {
   assert(size_ > 0);
   assert(check_everyone_position());
 }
 
-Simulation::Simulation(
-    int size, int S, int I, int R, Evolution const& evolution)
+Simulation::Simulation(int size,
+                       int S,
+                       int I,
+                       int R,
+                       Motion const& motion,
+                       Infection const& infection)
     : size_{size}
     , sir_groups_{People(S), People(I), People(R)}
-    , evolution_{evolution}
+    , motion_{motion}
+    , infection_{infection}
 {
   std::random_device rd;
   std::mt19937 gen(rd());
@@ -49,7 +58,10 @@ Simulation::Simulation(
   assert(check_everyone_position());
 }
 
-Simulation::Simulation(int size, int N, Evolution const& evolution)
-    : Simulation(size, N - 1, 1, 0, evolution)
+Simulation::Simulation(int size,
+                       int N,
+                       Motion const& motion,
+                       Infection const& infection)
+    : Simulation(size, N - 1, 1, 0, motion, infection)
 {
 }

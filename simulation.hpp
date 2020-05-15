@@ -17,7 +17,8 @@ class Simulation
 {
   int size_;
   SIRGroups sir_groups_;
-  Evolution evolution_;
+  Motion motion_;
+  Infection infection_;
 
   bool check_everyone_position();
 
@@ -26,10 +27,18 @@ class Simulation
              SIRGroups const& sir_groups = SIRGroups{People{},
                                                      People{},
                                                      People{}},
-             Evolution const& evolution = Evolution{});
-  Simulation(
-      int size, int S, int I, int R, Evolution const& evolution = Evolution{});
-  Simulation(int size, int N, Evolution const& evolution = Evolution{});
+             Motion const& motion = Motion{},
+             Infection const& infection = Infection{});
+  Simulation(int size,
+             int S,
+             int I,
+             int R,
+             Motion const& motion = Motion{},
+             Infection const& infection = Infection{});
+  Simulation(int size,
+             int N,
+             Motion const& motion = Motion{},
+             Infection const& infection = Infection{});
 
   auto& get_sir_groups() const
   {
