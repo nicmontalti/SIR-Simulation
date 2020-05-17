@@ -6,13 +6,26 @@
 #include <random>
 #include <typeinfo>
 #include <vector>
-#include "evolution.hpp"
+#include "SIR_population"
+#include "infection.hpp"
+#include "motion.hpp"
+
+struct Simulation_State
+{
+  SIR_Population population;
+  unsigned int ticks;
+
+  Simulation_State(SIR_Population i_population)
+      : ticks{0}, population{i_population}
+  {
+  }
+};
 
 template <class Motion = Random_Motion, class Infection = Simple_Infection>
 class Simulation
 {
   int size_;
-  SIR_population population_;
+  Simulation_State state_;
   Motion motion_;
   Infection infection_;
 
@@ -28,17 +41,17 @@ class Simulation
       return (it == people.end());
     };
 
-    return check_people_position(population_.S) &&
-           check_people_position(population_.I) &&
-           check_people_position(population_.R);
+    return check_people_position(state_.population.S) &&
+           check_people_position(state_.population.I) &&
+           check_people_position(state_.population.R);
   };
 
  public:
-  Simulation(int size, SIR_population const& population = SIR_population{})
+  Simulation(int size, SIR_Population const& population = SIR_Population{})
       : size_{size}
-      , population_{population}
-      , motion_{size_, population_}
-      , infection_{population_}
+      , state_{population}
+      , motion_{size_, state_.population, state_.ticks}
+      , infection_{size_, state_.population, state_.ticks}
   {
     assert(size_ > 0);
     assert((std::is_base_of<G_Motion, Motion>()));
@@ -48,9 +61,9 @@ class Simulation
 
   Simulation(int size, int S, int I, int R)
       : size_{size}
-      , population_{People(S), People(I), People(R)}
-      , motion_{size_, population_}
-      , infection_{population_}
+      , state_{SIR_Population{People(S), People(I), People(R)}}
+      , motion_{size_, state_.population, state_.ticks}
+      , infection_{size_, state_.population, state_.ticks}
   {
     assert(size_ > 0);
     assert((std::is_base_of<G_Motion, Motion>()));
@@ -67,12 +80,15 @@ class Simulation
       return Person{Position{x, y}, Velocity{0., 0.}};
     };
 
-    std::generate(
-        population_.S.begin(), population_.S.end(), new_starting_state);
-    std::generate(
-        population_.I.begin(), population_.I.end(), new_starting_state);
-    std::generate(
-        population_.R.begin(), population_.R.end(), new_starting_state);
+    std::generate(state_.population.S.begin(),
+                  state_.population.S.end(),
+                  new_starting_state);
+    std::generate(state_.population.I.begin(),
+                  state_.population.I.end(),
+                  new_starting_state);
+    std::generate(state_.population.R.begin(),
+                  state_.population.R.end(),
+                  new_starting_state);
 
     assert(check_everyone_position());
   }
@@ -80,10 +96,16 @@ class Simulation
   Simulation(int size, int N) : Simulation(size, N - 1, 1, 0)
   {
   }
-
-  auto& get_population() const
+  Simulation_State const& evolve()
   {
-    return population_;
+    motion_.move();
+    assert(check_everyone_position());
+    infection_.update();
+    return getState();
+  }
+  auto& get_state() const
+  {
+    return state_;
   }
   int size() const
   {

@@ -21,22 +21,34 @@ struct Person
 
 using People = std::vector<Person>;
 
-struct SIR_population
+struct SIR_Population
 {
   People S;
   People I;
   People R;
 };
 
+struct Simulation_State
+{
+  SIR_Population population;
+  unsigned int ticks;
+
+  Simulation_State(SIR_Population i_population)
+      : population{i_population}, ticks{0}
+  {
+  }
+};
+
 class G_Motion
 {
  protected:
   int size_;
-  SIR_population& population_;
+  SIR_Population& population_;
+  unsigned int ticks_;
 
  public:
-  G_Motion(int size, SIR_population& SIR_population)
-      : size_{size}, population_{SIR_population}
+  G_Motion(int size, SIR_Population& SIR_population, unsigned int ticks)
+      : size_{size}, population_{SIR_population}, ticks_{ticks}
   {
   }
   virtual void move()
@@ -47,8 +59,8 @@ class G_Motion
 class Random_Motion : public G_Motion
 {
  public:
-  Random_Motion(int size, SIR_population& SIR_population)
-      : G_Motion(size, SIR_population)
+  Random_Motion(int size, SIR_Population& SIR_population, unsigned int ticks)
+      : G_Motion(size, SIR_population, ticks)
   {
   }
 
@@ -60,10 +72,10 @@ class Random_Motion : public G_Motion
 class Second_Motion
 {
   int size_;
-  SIR_population& population_;
+  SIR_Population& population_;
 
  public:
-  Second_Motion(int size, SIR_population& SIR_population)
+  Second_Motion(int size, SIR_Population& SIR_population)
       : size_{size}, population_{SIR_population}
   {
   }
@@ -76,10 +88,13 @@ class Second_Motion
 class G_Infection
 {
  protected:
-  SIR_population& population_;
+  int size_;
+  SIR_Population& population_;
+  unsigned int ticks_;
 
  public:
-  G_Infection(SIR_population& SIR_population) : population_{SIR_population}
+  G_Infection(int size, SIR_Population& SIR_population, unsigned int ticks)
+      : size_{size}, population_{SIR_population}, ticks_{ticks}
   {
   }
   virtual void update()
@@ -90,7 +105,8 @@ class G_Infection
 class Simple_Infection : public G_Infection
 {
  public:
-  Simple_Infection(SIR_population& SIR_population) : G_Infection(SIR_population)
+  Simple_Infection(int size, SIR_Population& SIR_population, unsigned int ticks)
+      : G_Infection(size, SIR_population, ticks)
   {
   }
 
