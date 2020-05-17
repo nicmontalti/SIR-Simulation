@@ -57,11 +57,14 @@ class Random_Motion : public G_Motion
   }
 };
 
-class Second_Motion : public G_Motion
+class Second_Motion
 {
+  int size_;
+  SIR_population& population_;
+
  public:
   Second_Motion(int size, SIR_population& SIR_population)
-      : G_Motion(size, SIR_population)
+      : size_{size}, population_{SIR_population}
   {
   }
 

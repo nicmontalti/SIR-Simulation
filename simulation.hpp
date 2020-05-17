@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <cassert>
 #include <random>
+#include <typeinfo>
 #include <vector>
 #include "evolution.hpp"
 
@@ -40,6 +41,8 @@ class Simulation
       , infection_{population_}
   {
     assert(size_ > 0);
+    assert((std::is_base_of<G_Motion, Motion>()));
+    assert((std::is_base_of<G_Simulation, Simulation>()));
     assert(check_everyone_position());
   }
 
@@ -49,6 +52,10 @@ class Simulation
       , motion_{size_, population_}
       , infection_{population_}
   {
+    assert(size_ > 0);
+    assert((std::is_base_of<G_Motion, Motion>()));
+    assert((std::is_base_of<G_Simulation, Simulation>()));
+
     std::random_device rd;
     std::mt19937 gen(rd());
     std::uniform_real_distribution<double> position_distribution{
