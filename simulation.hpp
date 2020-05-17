@@ -42,7 +42,7 @@ class Simulation
   {
     assert(size_ > 0);
     assert((std::is_base_of<G_Motion, Motion>()));
-    assert((std::is_base_of<G_Simulation, Simulation>()));
+    assert((std::is_base_of<G_Infection, Infection>()));
     assert(check_everyone_position());
   }
 
@@ -54,7 +54,7 @@ class Simulation
   {
     assert(size_ > 0);
     assert((std::is_base_of<G_Motion, Motion>()));
-    assert((std::is_base_of<G_Simulation, Simulation>()));
+    assert((std::is_base_of<G_Infection, Infection>()));
 
     std::random_device rd;
     std::mt19937 gen(rd());
