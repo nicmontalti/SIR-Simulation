@@ -36,4 +36,6 @@ TEST_CASE("Testing evolution")
   SIR_Population people2{People{Person{11., -1.5, 2, 2}}, People(), People()};
   // assert check_everyone_position should fail
   // Simulation sim6(10, people2);
+
+  Simulation_State const& state = sim5.evolve();
 }

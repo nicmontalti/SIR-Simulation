@@ -6,7 +6,7 @@
 #include <random>
 #include <typeinfo>
 #include <vector>
-#include "SIR_population"
+#include "SIR_population.hpp"
 #include "infection.hpp"
 #include "motion.hpp"
 
@@ -101,7 +101,7 @@ class Simulation
     motion_.move();
     assert(check_everyone_position());
     infection_.update();
-    return getState();
+    return get_state();
   }
   auto& get_state() const
   {
