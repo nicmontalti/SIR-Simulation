@@ -74,7 +74,7 @@ class Simulation
     std::uniform_real_distribution<double> position_distribution{
         0., static_cast<double>(size_)};
 
-    auto new_starting_state = [&]() {
+    auto const new_starting_state = [&]() {
       double const x = position_distribution(gen);
       double const y = position_distribution(gen);
       return Person{Position{x, y}, Velocity{0., 0.}};
@@ -96,6 +96,7 @@ class Simulation
   Simulation(int size, int N) : Simulation(size, N - 1, 1, 0)
   {
   }
+
   Simulation_State const& evolve()
   {
     motion_.move();
@@ -103,10 +104,12 @@ class Simulation
     infection_.update();
     return get_state();
   }
-  auto& get_state() const
+
+  Simulation_State const& get_state() const
   {
     return state_;
   }
+
   int size() const
   {
     return size_;

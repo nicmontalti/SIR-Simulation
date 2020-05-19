@@ -34,8 +34,14 @@ TEST_CASE("Testing evolution")
         1.5);
 
   SIR_Population people2{People{Person{11., -1.5, 2, 2}}, People(), People()};
+
   // assert check_everyone_position should fail
   // Simulation sim6(10, people2);
 
-  Simulation_State const& state = sim5.evolve();
+  auto& state = sim5.evolve();
+  auto& state2 = sim5.get_state();
+
+  // state and state2 should be const&
+  // state = Simulation_State{SIR_Population{}};
+  // state2 = Simulation_State{SIR_Population{}};
 }
