@@ -5,15 +5,14 @@
 
 class G_Motion {
 protected:
-  int const size_;
-  SIR_Population &population_;
-  unsigned int const &ticks_;
+  int const& size_;
+  SIR_Population& population_;
+  unsigned int const& ticks_;
 
 public:
-  G_Motion(int const size, SIR_Population &population, unsigned int const &ticks)
-      : size_{size}, population_{population}, ticks_{ticks} {}
 
-  virtual void move() {}
+
+  virtual void move()=0;
 };
 
 class Random_Motion : public G_Motion {
