@@ -13,14 +13,13 @@ SIR_Population create_sir_population(int size, int S, int I, int R)
 
   SIR_Population population{People(S), People(I), People(R)};
 
-  std::random_device rd;
-  std::mt19937 gen(rd());
+  std::mt19937 random_seed(std::random_device{}());
   std::uniform_real_distribution<double> position_distribution{
       0., static_cast<double>(size)};
 
   auto new_starting_state = [&]() {
-    double const x = position_distribution(gen);
-    double const y = position_distribution(gen);
+    double const x = position_distribution(random_seed);
+    double const y = position_distribution(random_seed);
     return Person{Position{x, y}, Velocity{0., 0.}};
   };
 
