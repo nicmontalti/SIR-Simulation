@@ -28,23 +28,25 @@ double Simple_Infection::distance(Person const& left, Person const& right)
 
 void Simple_Infection::sane_to_infected(SIR_Population& population)
 {
-  auto last_sane = population.S.end();
-  auto last_infected = population.I.end();
   // using auto& it_sane
   // error: cannot bind non-const lvalue reference of type
   // ‘__gnu_cxx::__normal_iterator<Person*, std::vector<Person> >&’ to an
   // rvalue of type ‘std::vector<Person>::iterator {aka
   // __gnu_cxx::__normal_iterator<Person*, std::vector<Person> >}’
+  auto last_sane = population.S.end();
+  auto last_infected = population.I.end();
   for (auto it_sane = population.S.begin(); it_sane != last_sane; ++it_sane) {
     for (auto it_infected = population.I.begin(); it_infected != last_infected;
          ++it_infected) {
       if (distance(*it_sane, *it_infected) < limiting_distance_) {
         if (probability_distribution_(random_seed_) < infection_probability_) {
-          std::iter_swap(it_sane, last_sane);
-          population.I.push_back(*last_sane);
-          population.S.erase(last_sane);
-          last_sane = population.S.end();
+          population.I.push_back(*it_sane);
           last_infected = population.I.end();
+          std::iter_swap(it_sane, std::prev(last_sane));
+          it_sane = std::prev(it_sane);
+          population.S.pop_back();
+          last_sane = population.S.end();
+          break;
         }
       }
     }
@@ -57,9 +59,10 @@ void Simple_Infection::infected_to_recovered(SIR_Population& population)
   for (auto it_infected = population.I.begin(); it_infected != last_infected;
        ++it_infected) {
     if (probability_distribution_(random_seed_) < recovery_probability_) {
-      std::iter_swap(it_infected, last_infected);
-      population.R.push_back(*last_infected);
-      population.I.erase(last_infected);
+      population.R.push_back(*it_infected);
+      std::iter_swap(it_infected, std::prev(last_infected));
+      it_infected = std::prev(it_infected);
+      population.I.pop_back();
       last_infected = population.I.end();
     }
   }

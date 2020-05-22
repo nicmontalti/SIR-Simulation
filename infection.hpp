@@ -1,13 +1,14 @@
 #ifndef INFECTION_HPP
 #define INFECTION_HPP
 
+#include <cassert>
 #include <random>
 #include "SIR_population.hpp"
 
 class G_Infection
 {
  public:
-  bool virtual update(SIR_Population&, unsigned int const& ticks = 0) = 0;
+  bool virtual update(SIR_Population&, int const& ticks = 0) = 0;
 };
 
 class Simple_Infection : public G_Infection
@@ -20,7 +21,6 @@ class Simple_Infection : public G_Infection
   std::mt19937 random_seed_;
   std::uniform_real_distribution<float> probability_distribution_;
 
-  double distance(Person const&, Person const&);
   void sane_to_infected(SIR_Population&);
   void infected_to_recovered(SIR_Population&);
 
@@ -30,8 +30,10 @@ class Simple_Infection : public G_Infection
                    float infection_probability,
                    float recovery_probability);
 
-  bool update(SIR_Population& population, unsigned int const& ticks) override
+  bool update(SIR_Population& population, int const& ticks) override
   {
+    assert(ticks >= 0);
+    assert(ticks_frequency_ > 0);
     if (ticks % ticks_frequency_ == 0) {
       sane_to_infected(population);
       infected_to_recovered(population);
@@ -40,6 +42,8 @@ class Simple_Infection : public G_Infection
       return false;
     }
   }
+
+  double distance(Person const&, Person const&);
 };
 
 #endif
