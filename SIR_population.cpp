@@ -4,7 +4,7 @@
 #include <random>
 #include <vector>
 
-SIR_Population create_sir_population(int size, int S, int I, int R)
+SIR_Population make_sir_population(int size, int S, int I, int R)
 {
   assert(size > 0);
   assert(S >= 0);
@@ -26,4 +26,6 @@ SIR_Population create_sir_population(int size, int S, int I, int R)
   std::generate(population.S.begin(), population.S.end(), new_starting_state);
   std::generate(population.I.begin(), population.I.end(), new_starting_state);
   std::generate(population.R.begin(), population.R.end(), new_starting_state);
+
+  return population;
 }

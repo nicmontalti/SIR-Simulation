@@ -30,6 +30,6 @@ struct SIR_Population
   People R;
 };
 
-SIR_Population create_sir_population(int size, int S, int I, int R);
+SIR_Population make_sir_population(int size, int S, int I, int R);
 
 #endif
