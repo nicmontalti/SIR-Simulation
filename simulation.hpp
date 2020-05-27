@@ -6,16 +6,13 @@
 #include "infection.hpp"
 #include "motion.hpp"
 
-using std::make_unique;
-using std::unique_ptr;
-
 struct Simulation_State
 {
   SIR_Population population;
   unsigned int ticks;
 
   Simulation_State(SIR_Population i_population)
-      : ticks{0}, population{i_population}
+      : population{i_population}, ticks{0}
   {
   }
 };
@@ -24,17 +21,16 @@ class Simulation
 {
   int size_;
   Simulation_State state_;
-  unique_ptr<G_Motion> motion_;
-  unique_ptr<G_Infection> infection_;
+  G_Motion& motion_;
+  G_Infection& infection_;
 
   bool check_everyone_position();
 
  public:
-  Simulation(
-      int size,
-      SIR_Population const& population = SIR_Population{},
-      unique_ptr<G_Motion> motion = make_unique<Random_Motion>(),
-      unique_ptr<G_Infection> infection = make_unique<Simple_Infection>());
+  Simulation(int size,
+             SIR_Population const& population,
+             G_Motion& motion,
+             G_Infection& infection);
 
   Simulation_State const& evolve();
 

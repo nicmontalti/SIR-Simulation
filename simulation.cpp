@@ -26,12 +26,9 @@ bool Simulation::check_everyone_position()
 
 Simulation::Simulation(int size,
                        SIR_Population const& population,
-                       unique_ptr<G_Motion> motion,
-                       unique_ptr<G_Infection> infection)
-    : size_{size}
-    , state_{population}
-    , motion_{std::move(motion)}
-    , infection_{std::move(infection)}
+                       G_Motion& motion,
+                       G_Infection& infection)
+    : size_{size}, state_{population}, motion_{motion}, infection_{infection}
 {
   assert(size_ > 0);
   assert(check_everyone_position());
@@ -39,8 +36,8 @@ Simulation::Simulation(int size,
 
 Simulation_State const& Simulation::evolve()
 {
-  motion_->update(state_.population, state_.ticks, size_);
+  motion_.update(state_.population, state_.ticks, size_);
   assert(check_everyone_position());
-  infection_->update(state_.population, state_.ticks);
+  infection_.update(state_.population, state_.ticks);
   return get_state();
 }
