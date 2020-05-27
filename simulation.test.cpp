@@ -2,44 +2,48 @@
 #include "doctest.h"
 #include "simulation.hpp"
 
-TEST_CASE("Testing evolution")
+int constexpr ticks_frequency = 10;
+double constexpr limiting_distance = 1.;
+
+int constexpr size = 20;
+int constexpr S = 10;
+int constexpr I = 3;
+int constexpr R = 5;
+
+float constexpr infection_probability = 0.F;
+float constexpr recovering_probability = 0.F;
+
+TEST_CASE("Testing simulation")
 {
+  Random_Motion motion{};
+  Simple_Infection infection = {ticks_frequency,
+                                limiting_distance,
+                                infection_probability,
+                                recovering_probability};
+  auto population = make_sir_population(size, S, I, R);
+
   // assert size_ > ls 0 should fail
-  // Simulation{-10};
+  // Simulation{-10, population, motion, infection};
 
-  // assert is_base_of<G_Motion, Motion> should fail
-  // Simulation<Second_Motion>{10};
+  Simulation sim_1{size, population, motion, infection};
+  Simulation sim_2{size, make_sir_population(size, 1, 0, 0), motion, infection};
+  CHECK(sim_1.size() == sim_2.size());
 
-  Simulation<> sim2{10};
-  Simulation<G_Motion> sim3{10,
-                            SIR_Population{People(12), People(2), People(0)}};
-  CHECK(sim2.size() == sim3.size());
+  SIR_Population population_2{
+      People{Person{1., 1.5, 2, 2}}, People(), People()};
+  CHECK(Simulation(size, population_2, motion, infection)
+            .get_state()
+            .population.S[0]
+            .position.y == 1.5);
 
-  // Simulation<Simple_Infection> fails
-
-  Simulation<Random_Motion, Simple_Infection> sim4(10, 101);
-  auto S_people1 = sim4.get_state().population.S;
-  CHECK(S_people1.size() == 100);
-  std::cout << S_people1[0].position.x << S_people1[0].position.y << ' '
-            << S_people1[0].velocity.vx << '\n';
-
-  Simulation<> sim5(10, 100, 20, 1);
-  auto S_people2 = sim5.get_state().population.S;
-  CHECK(S_people1.size() == S_people2.size());
-  std::cout << S_people2[0].position.x << ' ' << S_people2[0].velocity.vx
-            << '\n';
-
-  SIR_Population population{People{Person{1., 1.5, 2, 2}}, People(), People()};
-  CHECK(Simulation<>(10, population).get_state().population.S[0].position.y ==
-        1.5);
-
-  SIR_Population people2{People{Person{11., -1.5, 2, 2}}, People(), People()};
+  SIR_Population population_3{
+      People{Person{11., -1.5, 2, 2}}, People(), People()};
 
   // assert check_everyone_position should fail
-  // Simulation sim6(10, people2);
+  // Simulation sim_3(10, population_3, motion, infection);
 
-  auto& state = sim5.evolve();
-  auto& state2 = sim5.get_state();
+  auto& state = sim_2.evolve();
+  auto& state2 = sim_2.get_state();
 
   // state and state2 should be const&
   // state = Simulation_State{SIR_Population{}};
