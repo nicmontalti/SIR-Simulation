@@ -4,7 +4,7 @@ project(sir_simulation CXX)
 
 enable_testing()
 
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
@@ -12,6 +12,11 @@ find_package(SFML COMPONENTS graphics window system REQUIRED)
 
 add_executable(run_infection_tests infection.cpp infection.test.cpp SIR_population.cpp run_tests.cpp)
 add_test(NAME infection_tests COMMAND run_infection_tests)
+ 
+add_executable(run_motion_tests motion.cpp motion.test.cpp SIR_population.cpp)
+target_compile_options(run_motion_tests PRIVATE -Wall -Wextra -fsanitize=address)
+target_link_options(run_motion_tests PRIVATE -fsanitize=address)
+target_link_libraries(run_motion_tests sfml-graphics sfml-window sfml-system)
 
 add_executable(run_simulation_tests simulation.cpp simulation.test.cpp infection.cpp motion.cpp SIR_population.cpp run_tests.cpp)
 add_test(NAME simulation_tests COMMAND run_simulation_tests)
