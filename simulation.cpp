@@ -39,8 +39,8 @@ Simulation::Simulation(int size,
 
 Simulation_State const& Simulation::evolve()
 {
-  motion_->move();
+  motion_->update(state_.population, state_.ticks, size_);
   assert(check_everyone_position());
-  infection_->update();
+  infection_->update(state_.population, state_.ticks);
   return get_state();
 }
