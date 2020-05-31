@@ -2,18 +2,15 @@
 #include <cassert>
 #include <cmath>
 
-Simple_Infection::Simple_Infection(int const ticks_frequency,
-                                   double limiting_distance,
+Simple_Infection::Simple_Infection(double limiting_distance,
                                    float infection_probability,
                                    float recovery_probability)
-    : ticks_frequency_{ticks_frequency}
-    , limiting_distance_{limiting_distance}
+    : limiting_distance_{limiting_distance}
     , infection_probability_{infection_probability}
     , recovery_probability_{recovery_probability}
     , random_seed_{std::random_device{}()}
     , probability_distribution_{0.F, 1.F}
 {
-  assert(ticks_frequency_ > 0);
   assert(limiting_distance_ > 0);
   assert(infection_probability_ >= 0 && infection_probability_ <= 1);
   assert(recovery_probability_ >= 0 && recovery_probability_ <= 1);

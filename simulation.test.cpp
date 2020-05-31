@@ -2,7 +2,6 @@
 #include "doctest.h"
 #include "simulation.hpp"
 
-int constexpr ticks_frequency = 10;
 double constexpr limiting_distance = 1.;
 
 int constexpr size = 20;
@@ -16,10 +15,8 @@ float constexpr recovering_probability = 0.F;
 TEST_CASE("Testing simulation")
 {
   Random_Motion motion{};
-  Simple_Infection infection = {ticks_frequency,
-                                limiting_distance,
-                                infection_probability,
-                                recovering_probability};
+  Simple_Infection infection = {
+      limiting_distance, infection_probability, recovering_probability};
   auto population = make_sir_population(size, S, I, R);
 
   // assert size_ > ls 0 should fail

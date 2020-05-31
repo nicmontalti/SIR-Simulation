@@ -27,7 +27,6 @@ inline bool operator==(SIR_Population const& left, SIR_Population const& right)
   return left.S == right.S && left.I == right.I && left.R == right.R;
 }
 
-int constexpr ticks_frequency = 10;
 double constexpr limiting_distance = 1.;
 
 int constexpr size = 20;
@@ -58,10 +57,8 @@ SIR_Population pop3 = {People{pers2}, People{pers3}, People{pers4}};
 float constexpr infection_probability_s = 1.F;
 float constexpr recovering_probability_s = 0.F;
 
-Simple_Infection infection = {ticks_frequency,
-                              limiting_distance,
-                              infection_probability_s,
-                              recovering_probability_s};
+Simple_Infection infection = {
+    limiting_distance, infection_probability_s, recovering_probability_s};
 
 // Simple_Infection::distance() needs to be public for this test
 TEST_CASE("Testing Simple_Infection::distance")
@@ -79,14 +76,10 @@ TEST_CASE("Testing Simple_Infection::distance")
 
 TEST_CASE("Testing Simple_Infection::sane_to_infected")
 {
-  CHECK(infection.update(pop1, ticks));
-  ++ticks;
-  CHECK(!infection.update(pop1, ticks));
-  ticks = 10;
-  CHECK(infection.update(pop2, ticks));
+  infection.update(pop2, ticks);
   CHECK(pop2 ==
         SIR_Population{People{pers1}, People{pers3, pers2}, People{pers4}});
-  CHECK(infection.update(pop3, ticks));
+  infection.update(pop3, ticks);
   CHECK(pop3.S.size() == 0);
   CHECK(pop3.I == People{pers3, pers2});
   CHECK(pop3.R == People{pers4});
@@ -97,13 +90,11 @@ float constexpr recovering_probability_r = 1.F;
 
 TEST_CASE("Testing Simple_Infection::infected_to_recovered")
 {
-  Simple_Infection infection2 = {ticks_frequency,
-                                 limiting_distance,
-                                 infection_probability_r,
-                                 recovering_probability_r};
+  Simple_Infection infection2 = {
+      limiting_distance, infection_probability_r, recovering_probability_r};
 
-  CHECK(infection2.update(pop1, ticks));
-  CHECK(infection2.update(pop3, ticks));
+  infection2.update(pop1, ticks);
+  infection2.update(pop3, ticks);
   CHECK(pop3.S == People{});
   CHECK(pop3.I == People{});
   CHECK(pop3.R == People{pers4, pers3, pers2});
