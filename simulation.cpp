@@ -39,5 +39,6 @@ Simulation_State const& Simulation::evolve()
   motion_.update(state_.population, state_.ticks, state_.size);
   assert(check_everyone_position());
   infection_.update(state_.population, state_.ticks);
+  ++state_.ticks;
   return get_state();
 }
