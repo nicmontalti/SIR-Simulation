@@ -15,10 +15,15 @@ struct Velocity
   double vy;
 };
 
+enum class Sub_Status { Sane, Incubation, Infective, Recovered };
+
 struct Person
 {
   Position position;
   Velocity velocity;
+  Sub_Status sub_status;
+  int time_of_infection = 0;
+  int time_of_recovery = 0;
 };
 
 using People = std::vector<Person>;
