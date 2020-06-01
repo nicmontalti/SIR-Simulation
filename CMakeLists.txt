@@ -25,3 +25,8 @@ add_executable(sir_simulation simulation.cpp infection.cpp motion.cpp SIR_popula
 target_compile_options(sir_simulation PRIVATE -Wall -Wextra -fsanitize=address)
 target_link_options(sir_simulation PRIVATE -fsanitize=address)
 target_link_libraries(sir_simulation sfml-graphics sfml-window sfml-system)
+
+add_executable(run_display_tests simulation.cpp infection.cpp motion.cpp SIR_population.cpp display.cpp display.test.cpp)
+target_compile_options(run_display_tests PRIVATE -Wall -Wextra -fsanitize=address)
+target_link_options(run_display_tests PRIVATE -fsanitize=address)
+target_link_libraries(run_display_tests sfml-graphics sfml-window sfml-system)
