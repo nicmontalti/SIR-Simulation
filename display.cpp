@@ -12,6 +12,7 @@ Display::Display(Simulation_State const& state, float circle_radius)
           "SIR Simulation")
 {
   window_.clear(sf::Color::Black);
+  update();
 }
 
 void Display::to_sfml(sf::CircleShape& circle)
@@ -36,7 +37,7 @@ void Display::draw_borders()
   window_.draw(lines);
 }
 
-void Display::display_person(Person const& person, sf::Color const& color)
+void Display::draw_person(Person const& person, sf::Color const& color)
 {
   sf::CircleShape circle(circle_radius_);
   circle.setFillColor(color);
@@ -46,10 +47,25 @@ void Display::display_person(Person const& person, sf::Color const& color)
   window_.draw(circle);
 }
 
-void Display::display_people(People const& people, sf::Color const& color)
+void Display::draw_people(People const& people)
 {
   for (Person const& person : people) {
-    display_person(person, color);
+    switch (Sub_Status sub_status = person.sub_status) {
+      case (Sub_Status::Sane):
+        draw_person(person, sf::Color::Green);
+        break;
+      case (Sub_Status::Incubation):
+        draw_person(person, sf::Color(255, 165, 0));  // Orange
+        break;
+      case (Sub_Status::Infective):
+        draw_person(person, sf::Color::Red);
+        break;
+      case (Sub_Status::Recovered):
+        draw_person(person, sf::Color::White);
+        break;
+      default:
+        assert(false);
+    }
   }
 }
 
@@ -60,9 +76,9 @@ bool Display::update()
 
     draw_borders();
 
-    display_people(state_.population.S, sf::Color::Green);
-    display_people(state_.population.I, sf::Color::Red);
-    display_people(state_.population.R, sf::Color::White);
+    draw_people(state_.population.S);
+    draw_people(state_.population.I);
+    draw_people(state_.population.R);
 
     window_.display();
 

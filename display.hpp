@@ -12,8 +12,8 @@ class Display
 
   void to_sfml(sf::CircleShape& circle);
   void draw_borders();
-  void display_person(Person const& person, sf::Color const& color);
-  void display_people(People const& people, sf::Color const& color);
+  void draw_person(Person const& person, sf::Color const& color);
+  void draw_people(People const& people);
 
  public:
   Display(Simulation_State const& state, float const circle_radius);
