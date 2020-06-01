@@ -1,6 +1,6 @@
-#include "infection.hpp"
 #include <cassert>
 #include <cmath>
+#include "infection.hpp"
 
 Simple_Infection::Simple_Infection(double limiting_distance,
                                    float infection_probability,
@@ -23,13 +23,8 @@ double Simple_Infection::distance(Person const& left, Person const& right)
   return std::sqrt(x_distance * x_distance + y_distance * y_distance);
 }
 
-void Simple_Infection::sane_to_infected(SIR_Population& population)
+void Simple_Infection::sane_to_infected(SIR_Population& population, int ticks)
 {
-  // using auto& it_sane
-  // error: cannot bind non-const lvalue reference of type
-  // ‘__gnu_cxx::__normal_iterator<Person*, std::vector<Person> >&’ to an
-  // rvalue of type ‘std::vector<Person>::iterator {aka
-  // __gnu_cxx::__normal_iterator<Person*, std::vector<Person> >}’
   auto last_sane = population.S.end();
   auto last_infected = population.I.end();
   for (auto it_sane = population.S.begin(); it_sane != last_sane; ++it_sane) {
@@ -37,6 +32,8 @@ void Simple_Infection::sane_to_infected(SIR_Population& population)
          ++it_infected) {
       if (distance(*it_sane, *it_infected) < limiting_distance_) {
         if (probability_distribution_(random_seed_) < infection_probability_) {
+          it_sane->sub_status = Sub_Status::Infective;
+          it_sane->time_of_infection = ticks;
           population.I.push_back(*it_sane);
           last_infected = population.I.end();
           std::iter_swap(it_sane, std::prev(last_sane));
@@ -50,12 +47,15 @@ void Simple_Infection::sane_to_infected(SIR_Population& population)
   }
 }
 
-void Simple_Infection::infected_to_recovered(SIR_Population& population)
+void Simple_Infection::infected_to_recovered(SIR_Population& population,
+                                             int ticks)
 {
   auto last_infected = population.I.end();
   for (auto it_infected = population.I.begin(); it_infected != last_infected;
        ++it_infected) {
     if (probability_distribution_(random_seed_) < recovery_probability_) {
+      it_infected->sub_status = Sub_Status::Recovered;
+      it_infected->time_of_recovery = ticks;
       population.R.push_back(*it_infected);
       std::iter_swap(it_infected, std::prev(last_infected));
       it_infected = std::prev(it_infected);
