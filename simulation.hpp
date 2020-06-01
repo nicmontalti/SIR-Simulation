@@ -8,18 +8,18 @@
 
 struct Simulation_State
 {
+  int const size;
   SIR_Population population;
-  unsigned int ticks;
+  int ticks;
 
-  Simulation_State(SIR_Population i_population)
-      : population{i_population}, ticks{0}
+  Simulation_State(int i_size, SIR_Population i_population)
+      : size{i_size}, population{i_population}, ticks{0}
   {
   }
 };
 
 class Simulation
 {
-  int size_;
   Simulation_State state_;
   G_Motion& motion_;
   G_Infection& infection_;
@@ -41,7 +41,7 @@ class Simulation
 
   int size() const
   {
-    return size_;
+    return state_.size;
   };
 };
 
