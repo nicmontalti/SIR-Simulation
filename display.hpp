@@ -9,6 +9,7 @@ class Display
   Simulation_State const& state_;
   float const circle_radius_;
   sf::CircleShape circle_;
+  sf::VertexArray borders_;
   sf::RenderWindow window_;
 
   void to_sfml(sf::CircleShape& circle);
@@ -19,6 +20,10 @@ class Display
  public:
   Display(Simulation_State const& state, float const circle_radius);
   bool update();
+  bool is_open()
+  {
+    return window_.isOpen();
+  }
 };
 
 #endif
