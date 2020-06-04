@@ -6,11 +6,13 @@ int constexpr window_border = 20;
 Display::Display(Simulation_State const& state, float circle_radius)
     : state_{state}
     , circle_radius_{circle_radius}
+    , circle_{circle_radius_}
     , window_(
           sf::VideoMode(state_.size + 2 * circle_radius_ + 2 * window_border,
                         state_.size + 2 * circle_radius_ + 2 * window_border),
           "SIR Simulation")
 {
+  assert(circle_.getRadius() == circle_radius_);
   window_.clear(sf::Color::Black);
   update();
 }
@@ -39,12 +41,11 @@ void Display::draw_borders()
 
 void Display::draw_person(Person const& person, sf::Color const& color)
 {
-  sf::CircleShape circle(circle_radius_);
-  circle.setFillColor(color);
-  circle.setOrigin(sf::Vector2f(circle_radius_, circle_radius_));
-  circle.setPosition(person.position.x, person.position.y);
-  to_sfml(circle);
-  window_.draw(circle);
+  circle_.setFillColor(color);
+  circle_.setOrigin(sf::Vector2f(circle_radius_, circle_radius_));
+  circle_.setPosition(person.position.x, person.position.y);
+  to_sfml(circle_);
+  window_.draw(circle_);
 }
 
 void Display::draw_people(People const& people)

@@ -8,6 +8,7 @@ class Display
 {
   Simulation_State const& state_;
   float const circle_radius_;
+  sf::CircleShape circle_;
   sf::RenderWindow window_;
 
   void to_sfml(sf::CircleShape& circle);
