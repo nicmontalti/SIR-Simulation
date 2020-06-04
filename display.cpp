@@ -6,11 +6,21 @@ int constexpr window_border = 20;
 Display::Display(Simulation_State const& state, float circle_radius)
     : state_{state}
     , circle_radius_{circle_radius}
+    , borders_{sf::LinesStrip, 5}
     , window_(
           sf::VideoMode(state_.size + 2 * circle_radius_ + 2 * window_border,
                         state_.size + 2 * circle_radius_ + 2 * window_border),
           "SIR Simulation")
 {
+  int window_size = window_.getSize().x;
+
+  borders_[0].position = sf::Vector2f(window_border, window_border);
+  borders_[1].position = sf::Vector2f(window_size - window_border, window_border);
+  borders_[2].position =
+      sf::Vector2f(window_size - window_border, window_size - window_border);
+  borders_[3].position = sf::Vector2f(window_border, window_size - window_border);
+  borders_[4].position = sf::Vector2f(window_border, window_border);
+
   window_.clear(sf::Color::Black);
   update();
 }
@@ -25,21 +35,11 @@ void Display::to_sfml(sf::CircleShape& circle)
 
 void Display::draw_borders()
 {
-  int window_size = window_.getSize().x;
-  sf::VertexArray lines(sf::LineStrip, 5);
-  lines[0].position = sf::Vector2f(window_border, window_border);
-  lines[1].position = sf::Vector2f(window_size - window_border, window_border);
-  lines[2].position =
-      sf::Vector2f(window_size - window_border, window_size - window_border);
-  lines[3].position = sf::Vector2f(window_border, window_size - window_border);
-  lines[4].position = sf::Vector2f(window_border, window_border);
-
-  window_.draw(lines);
+  window_.draw(borders_);
 }
 
 void Display::draw_person(Person const& person, sf::Color const& color)
 {
-  sf::CircleShape circle(circle_radius_);
   circle.setFillColor(color);
   circle.setOrigin(sf::Vector2f(circle_radius_, circle_radius_));
   circle.setPosition(person.position.x, person.position.y);
