@@ -23,8 +23,9 @@ int main()
   Simulation simulation{size, population, motion, infection};
   Display display{simulation.get_state(), circle_radius};
 
-  while (display.update()) {
+  while (display.is_open()) {
     simulation.evolve();
+    display.update();
     using namespace std::chrono_literals;
     std::this_thread::sleep_for(25ms);
   }
