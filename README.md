@@ -1,7 +1,7 @@
 # SIR Simulation
 
 
-# Bulding
+# Building
 
 ## Prerequisites
 
