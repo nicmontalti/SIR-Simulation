@@ -4,26 +4,24 @@
 #include <random>
 #include <vector>
 
+// valutare dentro funzione
 class New_Starting_State
 {
   Sub_Status sub_status_;
-  std::mt19937& random_seed_;
-  std::uniform_real_distribution<double>& position_distribution_;
+  std::mt19937 random_gen_;
+  std::uniform_real_distribution<double> position_distribution_;
 
  public:
-  New_Starting_State(
-      Sub_Status sub_status,
-      std::mt19937& random_seed,
-      std::uniform_real_distribution<double>& position_distribution)
+  New_Starting_State(int size, Sub_Status sub_status)
       : sub_status_{sub_status}
-      , random_seed_{random_seed}
-      , position_distribution_{position_distribution}
+      , random_gen_{std::random_device{}()}
+      , position_distribution_{0., size}
   {
   }
-  Person operator()() const
+  Person operator()()
   {
-    double const x = position_distribution_(random_seed_);
-    double const y = position_distribution_(random_seed_);
+    double const x = position_distribution_(random_gen_);
+    double const y = position_distribution_(random_gen_);
     return Person{Position{x, y}, Velocity{0., 0.}, sub_status_};
   }
 };
@@ -37,20 +35,15 @@ SIR_Population make_sir_population(int size, int S, int I, int R)
 
   SIR_Population population{People(S), People(I), People(R)};
 
-  std::mt19937 random_seed(std::random_device{}());
-  std::uniform_real_distribution<double> position_distribution{
-      0., static_cast<double>(size)};
-
-  New_Starting_State new_sane{
-      Sub_Status::Sane, random_seed, position_distribution};
-  New_Starting_State new_infected{
-      Sub_Status::Infective, random_seed, position_distribution};
-  New_Starting_State new_recovered{
-      Sub_Status::Recovered, random_seed, position_distribution};
-
-  std::generate(population.S.begin(), population.S.end(), new_sane);
-  std::generate(population.I.begin(), population.I.end(), new_infected);
-  std::generate(population.R.begin(), population.R.end(), new_recovered);
+  std::generate(population.S.begin(),
+                population.S.end(),
+                New_Starting_State(size, Sub_Status::Sane));
+  std::generate(population.I.begin(),
+                population.I.end(),
+                New_Starting_State(size, Sub_Status::Infective));
+  std::generate(population.R.begin(),
+                population.R.end(),
+                New_Starting_State(size, Sub_Status::Recovered));
 
   return population;
 }
