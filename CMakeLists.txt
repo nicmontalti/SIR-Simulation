@@ -9,7 +9,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 find_package(SFML COMPONENTS graphics window system REQUIRED)
-find_package(ROOT CONFIG REQUIRED)
+find_package(ROOT 6.16 CONFIG REQUIRED)
 
 include(${ROOT_USE_FILE})
 add_subdirectory(src)
