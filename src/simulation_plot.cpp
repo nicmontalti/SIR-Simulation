@@ -1,4 +1,5 @@
 #include "simulation_plot.hpp"
+#include <vector>
 
 SimulationPlot::SimulationPlot(Simulation_State const& state)
     : state_{state}, app{"", NULL, NULL}
