@@ -30,8 +30,8 @@ class Simple_Infection : public G_Infection
 
   void update(SIR_Population& population, int ticks) override
   {
-    sane_to_infected(population, ticks);
     infected_to_recovered(population, ticks);
+    sane_to_infected(population, ticks);
   }
   double distance(Person const&, Person const&);
 };
