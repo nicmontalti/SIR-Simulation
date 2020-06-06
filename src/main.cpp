@@ -1,4 +1,5 @@
 #include <chrono>
+#include <iostream>
 #include <thread>
 #include "SIR_population.hpp"
 #include "display.hpp"
@@ -7,13 +8,12 @@
 #include "simulation.hpp"
 #include "simulation_plot.hpp"
 
-
 int constexpr size = 600;
 int constexpr S = 400;
 int constexpr I = 10;
 int constexpr R = 0;
 float constexpr infection_probability = 0.05f;
-float constexpr recovery_probability = 0.001f;
+float constexpr recovery_probability = 0.003f;
 float constexpr circle_radius = 5.f;
 int constexpr incubation_time = 100;
 
@@ -30,10 +30,18 @@ int main()
   Display display{simulation.get_state(), circle_radius};
 
   while (display.is_open()) {
+    auto time = std::chrono::system_clock::now();
+
     simulation.evolve();
+
     display.update();
-    simplot.update();
+    if (simulation.get_state().ticks % 5 == 0) {
+      simplot.update();
+    }
+
     using namespace std::chrono_literals;
-    std::this_thread::sleep_for(25ms);
+    std::this_thread::sleep_until(time + 25ms);
   }
+  simplot.run(true);
+  std::cout << "test" << '\n';
 }
