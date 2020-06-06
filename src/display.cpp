@@ -1,5 +1,7 @@
 #include "display.hpp"
 #include <SFML/Graphics.hpp>
+#include<thread>
+#include<chrono>
 
 int constexpr window_border = 20;
 
