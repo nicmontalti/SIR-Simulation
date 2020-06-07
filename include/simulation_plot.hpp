@@ -4,35 +4,50 @@
 #include <TApplication.h>
 #include <TCanvas.h>
 #include <TGraph.h>
+#include <TMultiGraph.h>
+#include <iostream>
 #include <vector>
+#include "RQ_OBJECT.h"
+#include "TLegend.h"
+#include "TRootEmbeddedCanvas.h"
+#include "TSystem.h"
 #include "simulation.hpp"
 
 class SimulationPlot
 {
+  RQ_OBJECT("SimulationPlot")
   Simulation_State const& state_;
 
-  std::vector<int> S_axis_;
-  std::vector<int> I_axis_;
-  std::vector<int> R_axis_;
-  std::vector<int> ticks_axis_;
-
-  TApplication app;
+  TApplication app_;
   TCanvas canvas_;
+  TLegend legend_;
 
   TGraph S_graph_;
   TGraph I_graph_;
   TGraph R_graph_;
+  TMultiGraph multi_graph_;
 
-  void init_Graph(TGraph& graph, std::string const& title, int color, int padN);
+  void init_Graph(TGraph& graph, int color);
+  void update_graphs();
+  void update_canvas();
 
  public:
   SimulationPlot(Simulation_State const& state);
 
-  bool update();
+  void update();
+  void fit();
+
+  void run(bool return_type)
+  {
+    // run the application, returning from it when quitting Root
+    app_.Run(return_type);
+  }
 
   ~SimulationPlot()
   {
-    app.Terminate();
+    // don't return from the application, but terminate it
+    app_.SetReturnFromRun(false);
+    app_.Terminate();
   }
 };
 
