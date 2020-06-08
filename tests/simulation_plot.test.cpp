@@ -10,7 +10,7 @@ int main()
   Simple_Infection infection(1, 1, 0.01);
   auto population = make_sir_population(400, 995, 5, 0);
   Simulation simulation(400, population, motion, infection);
-  SimulationPlot simplot(simulation.get_state());
+  Simulation_Plot simplot(simulation.get_state());
 
   for (int i = 0; i < 2000; i++) {
     using namespace std::chrono_literals;
