@@ -3,6 +3,7 @@ add_compile_options(-Wall -Wextra -fsanitize=address)
 add_link_options(-fsanitize=address)
 
 add_executable(run_simulation_tests simulation.test.cpp run_tests.cpp)
+target_link_libraries(run_simulation_tests ROOT::MathCore)
 target_link_libraries(run_simulation_tests simulation simple_infection SIR_population)
 add_test(NAME simulation_tests COMMAND run_simulation_tests)
 
@@ -12,20 +13,23 @@ add_test(NAME simple_infection_tests COMMAND run_simple_infection_tests)
 
 add_executable(run_motion_tests motion.test.cpp)
 target_link_libraries(run_motion_tests simulation motion SIR_population)
+target_link_libraries(run_motion_tests ROOT::MathCore)
 target_link_libraries(run_motion_tests sfml-graphics sfml-window sfml-system)
 add_test(NAME motion_test COMMAND run_motion_tests)
 
 add_executable(run_incubation_infection_tests incubation_infection.test.cpp)
 target_link_libraries(run_incubation_infection_tests simulation incubation_infection SIR_population display)
+target_link_libraries(run_incubation_infection_tests ROOT::MathCore)
 target_link_libraries(run_incubation_infection_tests sfml-graphics sfml-window sfml-system)
 add_test(NAME incubation_infection_tests COMMAND run_incubation_infection_tests)
 
 add_executable(run_display_tests incubation_infection.test.cpp)
 target_link_libraries(run_display_tests simulation motion incubation_infection SIR_population display)
+target_link_libraries(run_display_tests ROOT::MathCore)
 target_link_libraries(run_display_tests sfml-graphics sfml-window sfml-system)
 add_test(NAME display_tests COMMAND run_display_tests)
 
 add_executable(run_plot_tests simulation_plot.test.cpp)
 target_link_libraries(run_plot_tests simulation motion simple_infection SIR_population simulation_plot)
-target_link_libraries(run_plot_tests ROOT::Hist ROOT::Gui)
+target_link_libraries(run_plot_tests ROOT::MathCore ROOT::Hist ROOT::Gui)
 add_test(NAME plot_tests COMMAND run_plot_tests)

@@ -1,6 +1,7 @@
 #ifndef MOTION_HPP
 #define MOTION_HPP
 
+#include <TRandom.h>
 #include <algorithm>
 #include <random>
 #include "SIR_population.hpp"
@@ -15,19 +16,13 @@ class G_Motion
 
 class Random_Motion : public G_Motion
 {
-  double mean_;
   double sd_;
-
-  std::mt19937_64 gen_;
-  std::normal_distribution<double> distribution_;
+  TRandom random_generator_;
 
  public:
-  Random_Motion(double mean = 0, double sd = 1)
-      : mean_{mean}
-      , sd_{sd}
-      , gen_{std::random_device{}()}
-      , distribution_{mean_, sd_}
+  Random_Motion(double sd = 1) : sd_{sd}, random_generator_{}
   {
+    random_generator_.SetSeed();
   }
   void update(SIR_Population& population,
               int const ticks,
@@ -35,14 +30,19 @@ class Random_Motion : public G_Motion
   {
     auto move = [&](Person& person) {
       // Accelerating
-      person.velocity.vx += distribution_(gen_) - std::abs(person.velocity.vx) *
-                                                      person.velocity.vx /
-                                                      10000;
-      person.velocity.vy += distribution_(gen_) - std::abs(person.velocity.vy) *
-                                                      person.velocity.vy /
-                                                      10000;
-      // Updating position and checking borders
+      person.velocity.vx += random_generator_.Gaus(0., sd_);
+      person.velocity.vy += random_generator_.Gaus(0., sd_);
+
+      // Friction
+      person.velocity.vx -=
+          std::abs(person.velocity.vx) * person.velocity.vx / 10000;
+      person.velocity.vy -=
+          std::abs(person.velocity.vy) * person.velocity.vy / 10000;
+
+      // Updating position
       person.position.x += person.velocity.vx;
+
+      // Checking borders and bouncing
       if (person.position.x > size || person.position.x < 0) {
         person.velocity.vx = -person.velocity.vx;
         person.position.x += person.velocity.vx;

@@ -18,7 +18,7 @@ int constexpr incubation_time = 100;
 int main()
 {
   SIR_Population population = make_sir_population(size, S, I, R);
-  Random_Motion motion{0., 0.1};
+  Random_Motion motion{0.1};
   Incubation_Infection infection{2 * circle_radius,
                                  infection_probability,
                                  recovery_probability,

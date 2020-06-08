@@ -42,7 +42,7 @@ int main()
   int size = 800;
   SIR_Population population = make_sir_population(size, 50, 20, 0);
   int ticks = 0;
-  Random_Motion motion{0, 0.1};
+  Random_Motion motion{0.1};
 
   sf::RenderWindow window(sf::VideoMode(800, 800), "My window");
 
