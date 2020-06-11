@@ -1,12 +1,12 @@
 #include <chrono>
 #include <iostream>
 #include <thread>
-#include "SIR_population.hpp"
 #include "display.hpp"
-#include "infection.hpp"
-#include "motion.hpp"
+#include "incubation_infection.hpp"
+#include "plot.hpp"
+#include "population.hpp"
+#include "random_motion.hpp"
 #include "simulation.hpp"
-#include "simulation_plot.hpp"
 
 int constexpr size = 600;
 int constexpr S = 400;
@@ -20,14 +20,14 @@ double constexpr motion_std = 0.1;
 
 int main()
 {
-  SIR_Population population = make_sir_population(size, S, I, R);
+  Population population = make_population(size, S, I, R);
   Random_Motion motion{motion_std};
   Incubation_Infection infection{2 * circle_radius,
                                  infection_probability,
                                  recovery_probability,
                                  incubation_time};
   Simulation simulation{size, population, motion, infection};
-  Simulation_Plot simplot(simulation.get_state());
+  Plot simplot(simulation.get_state());
   Display display{simulation.get_state(), circle_radius};
 
   while (display.is_open()) {

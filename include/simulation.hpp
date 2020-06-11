@@ -1,18 +1,17 @@
-#ifndef SIMULATION_HPP
-#define SIMULATION_HPP
+#ifndef SIR_SIMULATION_HPP
+#define SIR_SIMULATION_HPP
 
-#include <memory>
-#include "SIR_population.hpp"
 #include "infection.hpp"
 #include "motion.hpp"
+#include "population.hpp"
 
 struct Simulation_State
 {
   int const size;
-  SIR_Population population;
+  Population population;
   int ticks;
 
-  Simulation_State(int i_size, SIR_Population i_population)
+  Simulation_State(int i_size, Population i_population)
       : size{i_size}, population{i_population}, ticks{0}
   {
   }
@@ -28,7 +27,7 @@ class Simulation
 
  public:
   Simulation(int size,
-             SIR_Population const& population,
+             Population const& population,
              G_Motion& motion,
              G_Infection& infection);
 

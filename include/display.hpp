@@ -1,5 +1,5 @@
-#ifndef DISPLAY_HPP
-#define DISPLAY_HPP
+#ifndef SIR_DISPLAY_HPP
+#define SIR_DISPLAY_HPP
 
 #include <SFML/Graphics.hpp>
 #include "simulation.hpp"

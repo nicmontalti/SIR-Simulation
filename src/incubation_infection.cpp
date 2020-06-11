@@ -1,6 +1,6 @@
+#include "incubation_infection.hpp"
 #include <cassert>
 #include <cmath>
-#include "infection.hpp"
 
 Incubation_Infection::Incubation_Infection(double limiting_distance,
                                            float infection_probability,
@@ -26,8 +26,7 @@ double Incubation_Infection::distance(Person const& left, Person const& right)
   return std::sqrt(x_distance * x_distance + y_distance * y_distance);
 }
 
-void Incubation_Infection::sane_to_infected(SIR_Population& population,
-                                            int ticks)
+void Incubation_Infection::sane_to_infected(Population& population, int ticks)
 {
   auto last_sane = population.S.end();
   auto last_infected = population.I.end();
@@ -54,7 +53,7 @@ void Incubation_Infection::sane_to_infected(SIR_Population& population,
   }
 }
 
-void Incubation_Infection::infected_to_recovered(SIR_Population& population,
+void Incubation_Infection::infected_to_recovered(Population& population,
                                                  int ticks)
 {
   auto last_infected = population.I.end();

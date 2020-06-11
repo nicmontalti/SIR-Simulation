@@ -2,8 +2,8 @@
 #include <algorithm>
 #include <chrono>
 #include <thread>
-#include "SIR_population.hpp"
-#include "motion.hpp"
+#include "population.hpp"
+#include "random_motion.hpp"
 
 class Display_Person
 {
@@ -24,7 +24,7 @@ class Display_Person
   }
 };
 
-void display_population(SIR_Population& population, sf::RenderWindow& window)
+void display_population(Population& population, sf::RenderWindow& window)
 {
   std::for_each(population.S.begin(),
                 population.S.end(),
@@ -40,8 +40,7 @@ void display_population(SIR_Population& population, sf::RenderWindow& window)
 int main()
 {
   int size = 800;
-  SIR_Population population = make_sir_population(size, 50, 20, 0);
-  int ticks = 0;
+  Population population = make_population(size, 50, 20, 0);
   Random_Motion motion{0.1};
 
   sf::RenderWindow window(sf::VideoMode(800, 800), "My window");
@@ -58,7 +57,7 @@ int main()
     window.clear(sf::Color::Black);
 
     display_population(population, window);
-    motion.update(population, ticks, size);
+    motion.update(population, size);
 
     window.display();
     std::this_thread::sleep_until(time + 20ms);

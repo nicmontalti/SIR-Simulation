@@ -1,5 +1,5 @@
-#ifndef SIMULATION_PLOT_HPP
-#define SIMULATION_PLOT_HPP
+#ifndef SIR_PLOT_HPP
+#define SIR_PLOT_HPP
 
 #include <TApplication.h>
 #include <TCanvas.h>
@@ -8,7 +8,7 @@
 #include "TLegend.h"
 #include "simulation.hpp"
 
-class Simulation_Plot
+class Plot
 {
   Simulation_State const& state_;
 
@@ -25,8 +25,8 @@ class Simulation_Plot
   void update_canvas();
 
  public:
-  Simulation_Plot(Simulation_State const& state);
-  ~Simulation_Plot()
+  Plot(Simulation_State const& state);
+  ~Plot()
   {
     //((TRootCanvas*)canvas_.GetCanvasImp())
     //  ->Connect("CloseWindow()", "TApplication", &app_, "Terminate()");

@@ -3,9 +3,9 @@
 #include <cassert>
 #include <memory>
 #include <vector>
-#include "SIR_population.hpp"
 #include "infection.hpp"
 #include "motion.hpp"
+#include "population.hpp"
 
 bool Simulation::check_everyone_position()
 {
@@ -25,7 +25,7 @@ bool Simulation::check_everyone_position()
 }
 
 Simulation::Simulation(int size,
-                       SIR_Population const& population,
+                       Population const& population,
                        G_Motion& motion,
                        G_Infection& infection)
     : state_{size, population}, motion_{motion}, infection_{infection}
@@ -36,7 +36,7 @@ Simulation::Simulation(int size,
 
 Simulation_State const& Simulation::evolve()
 {
-  motion_.update(state_.population, state_.ticks, state_.size);
+  motion_.update(state_.population, state_.size);
   assert(check_everyone_position());
   infection_.update(state_.population, state_.ticks);
   ++state_.ticks;

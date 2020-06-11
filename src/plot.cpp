@@ -1,4 +1,4 @@
-#include "simulation_plot.hpp"
+#include "plot.hpp"
 #include <TApplication.h>
 #include <TAxis.h>
 #include <TCanvas.h>
@@ -11,7 +11,7 @@
 #include <fstream>
 #include "simulation.hpp"
 
-Simulation_Plot::Simulation_Plot(Simulation_State const& state)
+Plot::Plot(Simulation_State const& state)
     : state_{state}
     , app_{"", nullptr, nullptr}
     , canvas_{}
@@ -54,14 +54,14 @@ Simulation_Plot::Simulation_Plot(Simulation_State const& state)
   update();
 }
 
-void Simulation_Plot::init_Graph(TGraph& graph, int color)
+void Plot::init_Graph(TGraph& graph, int color)
 {
   graph.SetLineWidth(2);
   graph.SetLineColor(color);
   graph.SetMarkerColor(color);
 }
 
-void Simulation_Plot::update()
+void Plot::update()
 {
   // adding a new point at the end of graphs
   int new_point_index = S_graph_.GetN();
@@ -78,7 +78,7 @@ void Simulation_Plot::update()
   update_canvas();
 }
 
-void Simulation_Plot::update_canvas()
+void Plot::update_canvas()
 {
   // updating canvas with new graphs
   canvas_.Update();
@@ -88,13 +88,13 @@ void Simulation_Plot::update_canvas()
   gSystem->ProcessEvents();
 }
 
-void Simulation_Plot::fit()
+void Plot::fit()
 {
   S_graph_.Fit("gaus");
   update_canvas();
 }
 
-void Simulation_Plot::save()
+void Plot::save()
 {
   // save graphs in a ROOT file
   TFile root_file("SIR_graph.root", "recreate");

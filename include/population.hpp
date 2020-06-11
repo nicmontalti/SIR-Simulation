@@ -1,5 +1,5 @@
-#ifndef PERSON_HPP
-#define PERSON_HPP
+#ifndef SIR_POPULATION_HPP
+#define SIR_POPULATION_HPP
 
 #include <vector>
 
@@ -21,20 +21,20 @@ struct Person
 {
   Position position;
   Velocity velocity;
-  Sub_Status sub_status;
+  Sub_Status sub_status = Sub_Status::Sane;
   int time_of_infection = 0;
   int time_of_recovery = 0;
 };
 
 using People = std::vector<Person>;
 
-struct SIR_Population
+struct Population
 {
   People S;
   People I;
   People R;
 };
 
-SIR_Population make_sir_population(int size, int S, int I, int R);
+Population make_population(int size, int S, int I, int R);
 
 #endif

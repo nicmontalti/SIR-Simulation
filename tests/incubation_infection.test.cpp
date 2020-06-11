@@ -1,9 +1,9 @@
 #include <chrono>
 #include <thread>
-#include "SIR_population.hpp"
 #include "display.hpp"
-#include "infection.hpp"
-#include "motion.hpp"
+#include "incubation_infection.hpp"
+#include "population.hpp"
+#include "random_motion.hpp"
 #include "simulation.hpp"
 
 int constexpr size = 600;
@@ -17,7 +17,7 @@ int constexpr incubation_time = 100;
 
 int main()
 {
-  SIR_Population population = make_sir_population(size, S, I, R);
+  Population population = make_population(size, S, I, R);
   Random_Motion motion{0.1};
   Incubation_Infection infection{2 * circle_radius,
                                  infection_probability,

@@ -1,7 +1,8 @@
 #include "display.hpp"
 #include <SFML/Graphics.hpp>
-#include<thread>
-#include<chrono>
+#include <cassert>
+#include <chrono>
+#include <thread>
 
 int constexpr window_border = 20;
 
@@ -56,7 +57,7 @@ void Display::draw_person(Person const& person, sf::Color const& color)
 void Display::draw_people(People const& people)
 {
   for (Person const& person : people) {
-    switch (Sub_Status sub_status = person.sub_status) {
+    switch (person.sub_status) {
       case (Sub_Status::Sane):
         draw_person(person, sf::Color::Green);
         break;
