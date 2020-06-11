@@ -73,7 +73,7 @@ void Simulation_Plot::update()
   R_graph_.SetPoint(new_point_index, state_.ticks, state_.population.R.size());
 
   // setting display range of x axis
-  multi_graph_.GetXaxis()->SetRange(0., new_point_index);
+  multi_graph_.GetXaxis()->SetRange(0., state_.ticks);
 
   update_canvas();
 }

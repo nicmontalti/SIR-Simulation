@@ -6,7 +6,6 @@
 #include <TGraph.h>
 #include <TMultiGraph.h>
 #include "TLegend.h"
-#include "TRootCanvas.h"
 #include "simulation.hpp"
 
 class Simulation_Plot
@@ -34,11 +33,6 @@ class Simulation_Plot
     // app_.Run(kFALSE);
     app_.SetReturnFromRun(kFALSE);
     app_.Terminate();
-  }
-
-  bool is_open()
-  {
-    return !app_.IsRunning();
   }
 
   void update();
