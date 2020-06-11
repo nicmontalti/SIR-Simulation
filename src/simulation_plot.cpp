@@ -104,9 +104,15 @@ void Simulation_Plot::save()
   // save SIR datas in a CSV file
   std::ofstream csv_file{"SIR_data.csv"};
   csv_file << "Ticks, Sane, Infected, Recovered\n";
-  int total_ticks = S_graph_.GetN();
-  for (int i = 0; i != total_ticks; ++i) {
-    csv_file << i << ',' << S_graph_.GetPointY(i) << ','
-             << I_graph_.GetPointY(i) << ',' << R_graph_.GetPointY(i) << '\n';
+  int N_points = S_graph_.GetN();
+  for (int i = 0; i != N_points; ++i) {
+    double x, y;
+    S_graph_.GetPoint(i, x, y);
+    csv_file << x << ',';
+    csv_file << y << ',';
+    I_graph_.GetPoint(i, x, y);
+    csv_file << y << ',';
+    R_graph_.GetPoint(i, x, y);
+    csv_file << y << '\n';
   }
 }
