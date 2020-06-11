@@ -2,6 +2,7 @@
 #include <cassert>
 #include <cmath>
 #include <iostream>
+#include <iterator>
 #include "infection.hpp"
 
 Simple_Infection::Simple_Infection(double limiting_distance,
@@ -27,20 +28,22 @@ double Simple_Infection::distance(Person const& left, Person const& right)
 
 void Simple_Infection::sane_to_infected(SIR_Population& population, int ticks)
 {
-  auto it_sane = population.S.rbegin();
-  auto sane_end = population.S.rend();
+  auto it_sane = population.S.begin();
 
-  auto check_infection = [&](Person infected) {
+  int n_infected_to_check = population.I.size();
+
+  auto check_infection = [&](Person const& infected) {
     if (distance(*it_sane, infected) < limiting_distance_) {
       return probability_distribution_(random_seed_) < infection_probability_;
     }
     return false;
   };
 
-  auto first_to_check = population.I.begin();
-  auto check_end = population.I.end();
+  auto last_sane = population.S.end();
 
-  for (; it_sane != sane_end; ++it_sane) {
+  while (it_sane != last_sane) {
+    auto first_to_check = population.I.begin();
+    auto check_end = next(first_to_check, n_infected_to_check);
     bool has_been_infected =
         std::find_if(first_to_check, check_end, check_infection) != check_end;
 
@@ -49,7 +52,16 @@ void Simple_Infection::sane_to_infected(SIR_Population& population, int ticks)
       it_sane->time_of_infection = ticks;
 
       population.I.push_back(*it_sane);
+
+      // Fast erase swapping with back and popping
+      std::move(std::prev(last_sane), last_sane, it_sane);
       population.S.pop_back();
+
+      // Updating last_sane, it_sane is already at next person
+      last_sane = population.S.end();
+    } else {
+      // Updating it_sane to next person
+      std::advance(it_sane,1);
     }
   }
 }
@@ -57,16 +69,24 @@ void Simple_Infection::sane_to_infected(SIR_Population& population, int ticks)
 void Simple_Infection::infected_to_recovered(SIR_Population& population,
                                              int ticks)
 {
-  auto it_infected = population.I.rbegin();
-  auto infected_end = population.I.rend();
-
-  for (; it_infected != infected_end; ++it_infected) {
+  auto it_infected = population.I.begin();
+  auto last_infected = population.I.end();
+  while (it_infected != last_infected) {
     if (probability_distribution_(random_seed_) < recovery_probability_) {
       it_infected->sub_status = Sub_Status::Recovered;
       it_infected->time_of_recovery = ticks;
 
       population.R.push_back(*it_infected);
+
+      // Fast erase swapping with back and popping
+      std::move(std::prev(last_infected), last_infected, it_infected);
       population.I.pop_back();
+
+      // Updating last_infected, it_infected is already at next person
+      last_infected = population.I.end();
+    } else {
+      // Updating it_infected to next person to check
+      std::advance(it_infected,1);
     }
   }
 }
