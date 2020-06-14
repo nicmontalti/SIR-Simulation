@@ -7,7 +7,7 @@
 #include "motion.hpp"
 #include "population.hpp"
 
-bool Simulation::check_everyone_position()
+bool Simulation::check_everyone_position() const
 {
   auto const check_position = [=](Person const& person) {
     return (person.position.x >= 0 && person.position.x <= state_.size &&

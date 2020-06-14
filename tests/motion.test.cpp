@@ -40,7 +40,7 @@ void display_population(Population& population, sf::RenderWindow& window)
 int main()
 {
   int size = 800;
-  Population population = make_population(size, 50, 20, 0);
+  Population population = init_state(size, 50, 20, 0);
   Random_Motion motion{0.1};
 
   sf::RenderWindow window(sf::VideoMode(800, 800), "My window");

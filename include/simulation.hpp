@@ -5,25 +5,13 @@
 #include "motion.hpp"
 #include "population.hpp"
 
-struct Simulation_State
-{
-  int const size;
-  Population population;
-  int ticks;
-
-  Simulation_State(int i_size, Population i_population)
-      : size{i_size}, population{i_population}, ticks{0}
-  {
-  }
-};
-
 class Simulation
 {
   Simulation_State state_;
   G_Motion& motion_;
   G_Infection& infection_;
 
-  bool check_everyone_position();
+  bool check_everyone_position() const;
 
  public:
   Simulation(int size,

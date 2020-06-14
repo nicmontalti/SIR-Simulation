@@ -20,7 +20,7 @@ double constexpr motion_std = 0.1;
 
 int main()
 {
-  Population population = make_population(size, S, I, R);
+  Population population = init_state(size, S, I, R);
   Random_Motion motion{motion_std};
   Incubation_Infection infection{2 * circle_radius,
                                  infection_probability,

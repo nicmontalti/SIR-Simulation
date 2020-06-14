@@ -16,7 +16,7 @@ float constexpr circle_radius = 5.f;
 
 int main()
 {
-  Population population = make_population(size, S, I, R);
+  Population population = init_state(size, S, I, R);
   Random_Motion motion{0.1};
   Simple_Infection infection{
       2 * circle_radius, infection_probability, recovery_probability};

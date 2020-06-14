@@ -1,6 +1,7 @@
 #ifndef SIR_POPULATION_HPP
 #define SIR_POPULATION_HPP
 
+#include <cassert>
 #include <vector>
 
 struct Position
@@ -35,6 +36,20 @@ struct Population
   People R;
 };
 
-Population make_population(int size, int S, int I, int R);
+struct Simulation_State
+{
+  int const size;
+  Population population;
+  int ticks;
+
+  Simulation_State(int i_size, Population i_population = Population{})
+      : size{i_size}, population{i_population}, ticks{0}
+  {
+    assert(size > 0);
+    assert(ticks >= 0);
+  }
+};
+
+void init_state(Simulation_State& state, int S, int I, int R);
 
 #endif

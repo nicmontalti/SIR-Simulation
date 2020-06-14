@@ -36,7 +36,7 @@ int constexpr R = 5;
 
 int ticks = 0;
 
-Population pop1 = make_population(size, S, I, R);
+Population pop1 = init_state(size, S, I, R);
 
 TEST_CASE("Testing make_sir_population")
 {
