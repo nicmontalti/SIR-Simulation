@@ -1,9 +1,9 @@
+#include "simple_infection.hpp"
 #include <algorithm>
 #include <cassert>
 #include <cmath>
 #include <iostream>
 #include <iterator>
-#include "simple_infection.hpp"
 
 Simple_Infection::Simple_Infection(double limiting_distance,
                                    float infection_probability,
@@ -49,7 +49,7 @@ void Simple_Infection::sane_to_infected(Population& population, int ticks)
 
     if (has_been_infected) {
       it_sane->sub_status = Sub_Status::Infective;
-      it_sane->time_of_infection = ticks;
+      it_sane->ticks_of_infection = ticks;
 
       population.I.push_back(*it_sane);
 
@@ -73,7 +73,7 @@ void Simple_Infection::infected_to_recovered(Population& population, int ticks)
   while (it_infected != last_infected) {
     if (probability_distribution_(random_seed_) < recovery_probability_) {
       it_infected->sub_status = Sub_Status::Recovered;
-      it_infected->time_of_recovery = ticks;
+      it_infected->ticks_of_recovery = ticks;
 
       population.R.push_back(*it_infected);
 

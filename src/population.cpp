@@ -4,11 +4,13 @@
 #include <cassert>
 #include <vector>
 
-void init_state(Simulation_State& state, int S, int I, int R)
+Simulation_State::Simulation_State(int i_size, int S, int I, int R)
+    : size{i_size}
+    , population{Population{People(S), People(I), People(R)}}
+    , ticks{0}
 {
-  assert(S >= 0);
-  assert(I >= 0);
-  assert(R >= 0);
+  assert(size > 0);
+  assert(ticks >= 0);
 
   class New_Person
   {
@@ -22,23 +24,21 @@ void init_state(Simulation_State& state, int S, int I, int R)
     {
       random_gen_.SetSeed();
     }
-    void operator(Person& person)()
+    Person operator()()
     {
       double const x = random_gen_.Uniform(0., size_);
       double const y = random_gen_.Uniform(0., size_);
-      person = Person{Position{x, y}, Velocity{0., 0.}, sub_status_};
+      return Person{Position{x, y}, Velocity{0., 0.}, sub_status_};
     }
   };
 
-  state.population = Population{People(S), People(I), People(R)};
-
-  std::transform(state.population.S.begin(),
-                 state.population.S.end(),
-                 New_Person(state.size, Sub_Status::Sane));
-  std::generate(state.population.I.begin(),
-                state.population.I.end(),
-                New_Person(state.size, Sub_Status::Infective));
-  std::generate(state.population.R.begin(),
-                state.population.R.end(),
-                New_Person(state.size, Sub_Status::Recovered));
+  std::generate(population.S.begin(),
+                population.S.end(),
+                New_Person(size, Sub_Status::Sane));
+  std::generate(population.I.begin(),
+                population.I.end(),
+                New_Person(size, Sub_Status::Infective));
+  std::generate(population.R.begin(),
+                population.R.end(),
+                New_Person(size, Sub_Status::Recovered));
 }

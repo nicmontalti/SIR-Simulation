@@ -17,6 +17,8 @@ Display::Display(Simulation_State const& state, float circle_radius)
           "SIR Simulation")
 {
   assert(circle_.getRadius() == circle_radius_);
+  assert(window_.getSize().x == window_.getSize().y);
+
   int window_size = window_.getSize().x;
 
   borders_[0].position = sf::Vector2f(window_border, window_border);
@@ -32,7 +34,7 @@ Display::Display(Simulation_State const& state, float circle_radius)
   update();
 }
 
-void Display::to_sfml(sf::CircleShape& circle)
+void Display::move_inside_borders(sf::CircleShape& circle)
 {
   sf::Vector2f pos = circle.getPosition();
   pos += sf::Vector2f(window_border + circle_radius_,
@@ -50,7 +52,7 @@ void Display::draw_person(Person const& person, sf::Color const& color)
   circle_.setFillColor(color);
   circle_.setOrigin(sf::Vector2f(circle_radius_, circle_radius_));
   circle_.setPosition(person.position.x, person.position.y);
-  to_sfml(circle_);
+  move_inside_borders(circle_);
   window_.draw(circle_);
 }
 

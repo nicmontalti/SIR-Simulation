@@ -23,8 +23,8 @@ struct Person
   Position position;
   Velocity velocity;
   Sub_Status sub_status = Sub_Status::Sane;
-  int time_of_infection = 0;
-  int time_of_recovery = 0;
+  int ticks_of_infection = 0;
+  int ticks_of_recovery = 0;
 };
 
 using People = std::vector<Person>;
@@ -48,8 +48,7 @@ struct Simulation_State
     assert(size > 0);
     assert(ticks >= 0);
   }
+  Simulation_State(int i_size, int S, int I, int R);
 };
-
-void init_state(Simulation_State& state, int S, int I, int R);
 
 #endif

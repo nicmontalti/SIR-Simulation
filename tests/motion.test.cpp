@@ -40,7 +40,7 @@ void display_population(Population& population, sf::RenderWindow& window)
 int main()
 {
   int size = 800;
-  Population population = init_state(size, 50, 20, 0);
+  Simulation_State state{size, 50, 20, 0};
   Random_Motion motion{0.1};
 
   sf::RenderWindow window(sf::VideoMode(800, 800), "My window");
@@ -56,8 +56,8 @@ int main()
     }
     window.clear(sf::Color::Black);
 
-    display_population(population, window);
-    motion.update(population, size);
+    display_population(state.population, window);
+    motion.update(state.population, size);
 
     window.display();
     std::this_thread::sleep_until(time + 20ms);

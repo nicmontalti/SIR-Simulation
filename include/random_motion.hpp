@@ -3,13 +3,12 @@
 
 #include <TRandom.h>
 #include <algorithm>
-#include <random>
 #include "motion.hpp"
 #include "population.hpp"
 
 class Random_Motion : public G_Motion
 {
-  double sd_;
+  double const sd_;
   TRandom random_generator_;
 
  public:
@@ -17,7 +16,7 @@ class Random_Motion : public G_Motion
   {
     random_generator_.SetSeed();
   }
-  void update(Population& population, int const size) override
+  void update(Population& population, int size) override
   {
     auto move = [&](Person& person) {
       // Accelerating
@@ -32,13 +31,13 @@ class Random_Motion : public G_Motion
 
       // Updating position
       person.position.x += person.velocity.vx;
+      person.position.y += person.velocity.vy;
 
       // Checking borders and bouncing
       if (person.position.x > size || person.position.x < 0) {
         person.velocity.vx = -person.velocity.vx;
         person.position.x += person.velocity.vx;
       }
-      person.position.y += person.velocity.vy;
       if (person.position.y > size || person.position.y < 0) {
         person.velocity.vy = -person.velocity.vy;
         person.position.y += person.velocity.vy;

@@ -2,13 +2,14 @@ include_directories(${PROJECT_SOURCE_DIR}/include)
 add_compile_options(-Wall -Wextra -fsanitize=address)
 add_link_options(-fsanitize=address)
 
-add_executable(run_simulation_tests simulation.test.cpp run_tests.cpp)
-target_link_libraries(run_simulation_tests ROOT::MathCore)
-target_link_libraries(run_simulation_tests simulation simple_infection population)
-add_test(NAME simulation_tests COMMAND run_simulation_tests)
+#add_executable(run_simulation_tests simulation.test.cpp run_tests.cpp)
+#target_link_libraries(run_simulation_tests ROOT::MathCore)
+#target_link_libraries(run_simulation_tests simulation simple_infection population)
+#add_test(NAME simulation_tests COMMAND run_simulation_tests)
 
 add_executable(run_simple_infection_tests simple_infection.test.cpp run_tests.cpp)
 target_link_libraries(run_simple_infection_tests simulation simple_infection population)
+target_link_libraries(run_simple_infection_tests ROOT::MathCore)
 add_test(NAME simple_infection_tests COMMAND run_simple_infection_tests)
 
 add_executable(run_motion_tests motion.test.cpp)

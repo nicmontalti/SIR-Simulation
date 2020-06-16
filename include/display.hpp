@@ -12,13 +12,13 @@ class Display
   sf::VertexArray borders_;
   sf::RenderWindow window_;
 
-  void to_sfml(sf::CircleShape& circle);
+  void move_inside_borders(sf::CircleShape& circle);
   void draw_borders();
   void draw_person(Person const& person, sf::Color const& color);
   void draw_people(People const& people);
 
  public:
-  Display(Simulation_State const& state, float const circle_radius);
+  Display(Simulation_State const& state, float circle_radius);
   bool update();
   bool is_open()
   {

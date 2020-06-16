@@ -17,13 +17,13 @@ int constexpr incubation_time = 100;
 
 int main()
 {
-  Population population = init_state(size, S, I, R);
+  Simulation_State state{size, S, I, R};
   Random_Motion motion{0.1};
   Incubation_Infection infection{2 * circle_radius,
                                  infection_probability,
                                  recovery_probability,
                                  incubation_time};
-  Simulation simulation{size, population, motion, infection};
+  Simulation simulation{state, motion, infection};
   Display display{simulation.get_state(), circle_radius};
 
   while (display.is_open()) {

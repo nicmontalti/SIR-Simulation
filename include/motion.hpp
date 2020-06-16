@@ -6,7 +6,7 @@
 class G_Motion
 {
  public:
-  virtual void update(Population& population, int const size) = 0;
+  virtual void update(Population& population, int size) = 0;
 };
 
 #endif

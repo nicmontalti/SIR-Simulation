@@ -24,21 +24,19 @@ bool Simulation::check_everyone_position() const
          check_people_position(state_.population.R);
 }
 
-Simulation::Simulation(int size,
-                       Population const& population,
+Simulation::Simulation(Simulation_State& state,
                        G_Motion& motion,
                        G_Infection& infection)
-    : state_{size, population}, motion_{motion}, infection_{infection}
+    : state_{state}, motion_{motion}, infection_{infection}
 {
   assert(state_.size > 0);
   assert(check_everyone_position());
 }
 
-Simulation_State const& Simulation::evolve()
+void Simulation::evolve()
 {
   motion_.update(state_.population, state_.size);
   assert(check_everyone_position());
   infection_.update(state_.population, state_.ticks);
   ++state_.ticks;
-  return get_state();
 }

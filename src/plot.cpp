@@ -24,14 +24,14 @@ Plot::Plot(Simulation_State const& state)
   // app_.SetReturnFromRun(kTRUE);
   // terminate application by closing canvas (pressing on the 'x')
   // ((TRootCanvas*)canvas_.GetCanvasImp())
-  //   ->Connect("CloseWindow()", "TApplication", &app_, "Terminate()");
+  //     ->Disconnect((TRootCanvas*)canvas_.GetCanvasImp());
 
   canvas_.SetTitle("SIR Simulation");
 
   // initializing graphs with different colors
-  init_Graph(S_graph_, kGreen);
-  init_Graph(I_graph_, kRed);
-  init_Graph(R_graph_, kBlue);
+  init_graph(S_graph_, kGreen);
+  init_graph(I_graph_, kRed);
+  init_graph(R_graph_, kBlue);
 
   multi_graph_.SetTitle("SIR Simulation");
 
@@ -54,7 +54,7 @@ Plot::Plot(Simulation_State const& state)
   update();
 }
 
-void Plot::init_Graph(TGraph& graph, int color)
+void Plot::init_graph(TGraph& graph, int color)
 {
   graph.SetLineWidth(2);
   graph.SetLineColor(color);

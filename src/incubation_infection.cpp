@@ -38,7 +38,7 @@ void Incubation_Infection::sane_to_infected(Population& population, int ticks)
           if (probability_distribution_(random_seed_) <
               infection_probability_) {
             it_sane->sub_status = Sub_Status::Incubation;
-            it_sane->time_of_infection = ticks;
+            it_sane->ticks_of_infection = ticks;
             population.I.push_back(*it_sane);
             last_infected = population.I.end();
             std::iter_swap(it_sane, std::prev(last_sane));
@@ -59,12 +59,12 @@ void Incubation_Infection::infected_to_recovered(Population& population,
   auto last_infected = population.I.end();
   for (auto it_infected = population.I.begin(); it_infected != last_infected;
        ++it_infected) {
-    if (it_infected->time_of_infection + incubation_time_ == ticks) {
+    if (it_infected->ticks_of_infection + incubation_time_ == ticks) {
       it_infected->sub_status = Sub_Status::Infective;
     }
     if (probability_distribution_(random_seed_) < recovery_probability_) {
       it_infected->sub_status = Sub_Status::Recovered;
-      it_infected->time_of_recovery = ticks;
+      it_infected->ticks_of_recovery = ticks;
       population.R.push_back(*it_infected);
       std::iter_swap(it_infected, std::prev(last_infected));
       it_infected = std::prev(it_infected);

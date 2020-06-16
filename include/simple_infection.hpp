@@ -17,6 +17,7 @@ class Simple_Infection : public G_Infection
 
   void sane_to_infected(Population& population, int ticks);
   void infected_to_recovered(Population& population, int ticks);
+  double distance(Person const&, Person const&);
 
  public:
   Simple_Infection(double limiting_distance,
@@ -28,7 +29,6 @@ class Simple_Infection : public G_Infection
     infected_to_recovered(population, ticks);
     sane_to_infected(population, ticks);
   }
-  double distance(Person const&, Person const&);
 };
 
 #endif

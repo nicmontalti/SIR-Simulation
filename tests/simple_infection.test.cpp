@@ -36,7 +36,8 @@ int constexpr R = 5;
 
 int ticks = 0;
 
-Population pop1 = init_state(size, S, I, R);
+Simulation_State state{size, S, I, R};
+Population& pop1 = state.population;
 
 TEST_CASE("Testing make_sir_population")
 {
@@ -64,7 +65,7 @@ Simple_Infection infection = {
     limiting_distance, infection_probability_s, recovering_probability_s};
 
 // Simple_Infection::distance() needs to be public for this test
-TEST_CASE("Testing Simple_Infection::distance")
+/* TEST_CASE("Testing Simple_Infection::distance")
 {
   Person pers5 = {Position{0., 0.}, Velocity{1., 2.}};
   Person pers6 = {Position{0., 0.}, Velocity{-10., 32.}};
@@ -75,7 +76,7 @@ TEST_CASE("Testing Simple_Infection::distance")
         doctest::Approx(5.64).epsilon(0.01));
   CHECK(infection.distance(pers5, pers6) == doctest::Approx(0.).epsilon(0.01));
   CHECK(infection.distance(pers7, pers8) == doctest::Approx(5.).epsilon(0.01));
-}
+} */
 
 TEST_CASE("Testing Simple_Infection::sane_to_infected")
 {

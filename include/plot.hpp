@@ -5,6 +5,7 @@
 #include <TCanvas.h>
 #include <TGraph.h>
 #include <TMultiGraph.h>
+#include <TRootCanvas.h>
 #include "TLegend.h"
 #include "simulation.hpp"
 
@@ -21,18 +22,18 @@ class Plot
   TGraph R_graph_;
   TMultiGraph multi_graph_;
 
-  void init_Graph(TGraph& graph, int color);
+  void init_graph(TGraph& graph, int color);
   void update_canvas();
 
  public:
   Plot(Simulation_State const& state);
   ~Plot()
   {
-    //((TRootCanvas*)canvas_.GetCanvasImp())
-    //  ->Connect("CloseWindow()", "TApplication", &app_, "Terminate()");
-    // app_.Run(kFALSE);
-    app_.SetReturnFromRun(kFALSE);
-    app_.Terminate();
+    ((TRootCanvas*)canvas_.GetCanvasImp())
+        ->Connect("CloseWindow()", "TApplication", &app_, "Terminate()");
+    app_.Run(kFALSE);
+    // app_.SetReturnFromRun(kTRUE);
+    // app_.Terminate();
   }
 
   void update();

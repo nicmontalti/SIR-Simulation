@@ -20,13 +20,13 @@ double constexpr motion_std = 0.1;
 
 int main()
 {
-  Population population = init_state(size, S, I, R);
+  Simulation_State state{size, S, I, R};
   Random_Motion motion{motion_std};
   Incubation_Infection infection{2 * circle_radius,
                                  infection_probability,
                                  recovery_probability,
                                  incubation_time};
-  Simulation simulation{size, population, motion, infection};
+  Simulation simulation{state, motion, infection};
   Plot simplot(simulation.get_state());
   Display display{simulation.get_state(), circle_radius};
 
@@ -36,7 +36,7 @@ int main()
     simulation.evolve();
 
     display.update();
-    if (simulation.get_state().ticks % 5 == 0) {
+    if (simulation.get_state().ticks % 10 == 0) {
       simplot.update();
     }
 
