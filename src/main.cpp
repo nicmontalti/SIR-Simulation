@@ -2,7 +2,7 @@
 #include <iostream>
 #include <thread>
 #include "display.hpp"
-#include "incubation_infection.hpp"
+#include "simple_infection.hpp"
 #include "plot.hpp"
 #include "population.hpp"
 #include "random_motion.hpp"
@@ -13,19 +13,18 @@ int constexpr S = 400;
 int constexpr I = 10;
 int constexpr R = 0;
 float constexpr infection_probability = 0.05f;
-float constexpr recovery_probability = 0.003f;
+float constexpr mean_recovery_time = 200.f;
 float constexpr circle_radius = 5.f;
-int constexpr incubation_time = 100;
+int constexpr incubation_time = 50;
 double constexpr motion_std = 0.1;
 
 int main()
 {
   Simulation_State state{size, S, I, R};
   Random_Motion motion{motion_std};
-  Incubation_Infection infection{2 * circle_radius,
+  Simple_Infection infection{2 * circle_radius,
                                  infection_probability,
-                                 recovery_probability,
-                                 incubation_time};
+                                 mean_recovery_time};
   Simulation simulation{state, motion, infection};
   Plot simplot(simulation.get_state());
   Display display{simulation.get_state(), circle_radius};
