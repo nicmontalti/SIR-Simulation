@@ -1,23 +1,24 @@
-#include "simple_infection.hpp"
 #include <algorithm>
 #include <cassert>
 #include <cmath>
-#include <iostream>
 #include <iterator>
+#include "simple_infection.hpp"
 
 Simple_Infection::Simple_Infection(double limiting_distance,
                                    float infection_probability,
-                                   float recovery_probability)
+                                   float mean_recovery_time)
     : limiting_distance_{limiting_distance}
     , infection_probability_{infection_probability}
-    , recovery_probability_{recovery_probability}
+    , mean_recovery_time_{mean_recovery_time}
     , random_seed_{std::random_device{}()}
     , probability_distribution_{0.F, 1.F}
+    , recovery_time_distribution_{mean_recovery_time_, 1.F}
+    , ticks_{0}
 {
   assert(limiting_distance_ > 0);
   assert(infection_probability_ >= 0 && infection_probability_ <= 1);
-  assert(recovery_probability_ >= 0 && recovery_probability_ <= 1);
-}
+  assert(mean_recovery_time_ >= 0);
+  }
 
 double Simple_Infection::distance(Person const& left, Person const& right)
 {
@@ -26,7 +27,14 @@ double Simple_Infection::distance(Person const& left, Person const& right)
   return std::sqrt(x_distance * x_distance + y_distance * y_distance);
 }
 
-void Simple_Infection::sane_to_infected(Population& population, int ticks)
+void Simple_Infection::infect(Person& person){
+
+  person.sub_status = Sub_Status::Infective;
+  person.ticks_of_infection = ticks_;
+  person.ticks_of_recovery = ticks_ + recovery_time_distribution_(random_seed_);
+}
+
+void Simple_Infection::sane_to_infected(Population& population)
 {
   auto it_sane = population.S.begin();
 
@@ -48,8 +56,7 @@ void Simple_Infection::sane_to_infected(Population& population, int ticks)
         std::find_if(first_to_check, check_end, check_infection) != check_end;
 
     if (has_been_infected) {
-      it_sane->sub_status = Sub_Status::Infective;
-      it_sane->ticks_of_infection = ticks;
+      infect(*it_sane);
 
       population.I.push_back(*it_sane);
 
@@ -61,19 +68,18 @@ void Simple_Infection::sane_to_infected(Population& population, int ticks)
       last_sane = population.S.end();
     } else {
       // Updating it_sane to next person
-      std::advance(it_sane, 1);
+      std::advance(it_sane,1);
     }
   }
 }
 
-void Simple_Infection::infected_to_recovered(Population& population, int ticks)
+void Simple_Infection::infected_to_recovered(Population& population)
 {
   auto it_infected = population.I.begin();
   auto last_infected = population.I.end();
   while (it_infected != last_infected) {
-    if (probability_distribution_(random_seed_) < recovery_probability_) {
+    if (it_infected->ticks_of_recovery <= ticks_) {
       it_infected->sub_status = Sub_Status::Recovered;
-      it_infected->ticks_of_recovery = ticks;
 
       population.R.push_back(*it_infected);
 
@@ -85,7 +91,7 @@ void Simple_Infection::infected_to_recovered(Population& population, int ticks)
       last_infected = population.I.end();
     } else {
       // Updating it_infected to next person to check
-      std::advance(it_infected, 1);
+      std::advance(it_infected,1);
     }
   }
 }
