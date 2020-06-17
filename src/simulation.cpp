@@ -31,6 +31,7 @@ Simulation::Simulation(Simulation_State& state,
 {
   assert(state_.size > 0);
   assert(check_everyone_position());
+  evolve();
 }
 
 void Simulation::evolve()
