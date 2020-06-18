@@ -1,24 +1,24 @@
+#include "simple_infection.hpp"
 #include <algorithm>
 #include <cassert>
 #include <cmath>
 #include <iterator>
-#include "simple_infection.hpp"
 
 Simple_Infection::Simple_Infection(double limiting_distance,
                                    float infection_probability,
-                                   float mean_recovery_ticks)
+                                   float mean_recovery_ticks,
+                                   float sd_recovery_ticks)
     : limiting_distance_{limiting_distance}
     , infection_probability_{infection_probability}
     , mean_recovery_ticks_{mean_recovery_ticks}
-    , random_seed_{std::random_device{}()}
-    , probability_distribution_{0.F, 1.F}
-    , recovery_ticks_distribution_{mean_recovery_ticks_, 1.F}
+    , sd_recovery_ticks_{sd_recovery_ticks}
+    , random_gen_{}
     , ticks_{0}
 {
   assert(limiting_distance_ > 0);
   assert(infection_probability_ >= 0 && infection_probability_ <= 1);
   assert(mean_recovery_ticks_ >= 0);
-  }
+}
 
 double Simple_Infection::distance(Person const& left, Person const& right)
 {
@@ -27,11 +27,12 @@ double Simple_Infection::distance(Person const& left, Person const& right)
   return std::sqrt(x_distance * x_distance + y_distance * y_distance);
 }
 
-void Simple_Infection::infect(Person& person){
-
+void Simple_Infection::infect(Person& person)
+{
   person.sub_status = Sub_Status::Infective;
   person.ticks_of_infection = ticks_;
-  person.ticks_of_recovery = ticks_ + recovery_ticks_distribution_(random_seed_);
+  person.ticks_of_recovery =
+      ticks_ + random_gen_.Gaus(mean_recovery_ticks_, sd_recovery_ticks_);
 }
 
 void Simple_Infection::sane_to_infected(Population& population)
@@ -42,7 +43,7 @@ void Simple_Infection::sane_to_infected(Population& population)
 
   auto check_infection = [&](Person const& infected) {
     if (distance(*it_sane, infected) < limiting_distance_) {
-      return probability_distribution_(random_seed_) < infection_probability_;
+      return random_gen_.Uniform(1.f) < infection_probability_;
     }
     return false;
   };
@@ -68,7 +69,7 @@ void Simple_Infection::sane_to_infected(Population& population)
       last_sane = population.S.end();
     } else {
       // Updating it_sane to next person
-      std::advance(it_sane,1);
+      std::advance(it_sane, 1);
     }
   }
 }
@@ -91,7 +92,7 @@ void Simple_Infection::infected_to_recovered(Population& population)
       last_infected = population.I.end();
     } else {
       // Updating it_infected to next person to check
-      std::advance(it_infected,1);
+      std::advance(it_infected, 1);
     }
   }
 }

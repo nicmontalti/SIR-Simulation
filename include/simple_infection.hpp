@@ -1,9 +1,9 @@
 #ifndef SIR_SIMPLE_INFECTION_HPP
 #define SIR_SIMPLE_INFECTION_HPP
 
+#include <TRandom.h>
 #include <algorithm>
 #include <cassert>
-#include <random>
 #include "infection.hpp"
 #include "population.hpp"
 
@@ -12,10 +12,9 @@ class Simple_Infection : public G_Infection
   double const limiting_distance_;
   float const infection_probability_;
   float const mean_recovery_ticks_;
+  float const sd_recovery_ticks_;
 
-  std::mt19937 random_seed_;
-  std::uniform_real_distribution<float> probability_distribution_;
-  std::normal_distribution<float> recovery_ticks_distribution_;
+  TRandom random_gen_;
 
   int ticks_;
 
@@ -26,7 +25,8 @@ class Simple_Infection : public G_Infection
  public:
   Simple_Infection(double limiting_distance,
                    float infection_probability,
-                   float recovery_probability);
+                   float mean_recovery_ticks,
+                   float sd_recovery_ticks);
 
   void update(Population& population, int ticks) override
   {

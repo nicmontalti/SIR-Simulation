@@ -56,10 +56,13 @@ Population pop2 = {People{pers1, pers2}, People{pers3}, People{pers4}};
 Population pop3 = {People{pers2}, People{pers3}, People{pers4}};
 
 float constexpr infection_probability_s = 1.F;
-float constexpr recovering_probability_s = 0.F;
+float constexpr mean_recovering_ticks_s = 100000.F;  // da migliorare
+float constexpr sd_recoverty_ticks_s = 0.f;          // da migliorare
 
-Simple_Infection infection = {
-    limiting_distance, infection_probability_s, recovering_probability_s};
+Simple_Infection infection = {limiting_distance,
+                              infection_probability_s,
+                              mean_recovering_ticks_s,
+                              sd_recoverty_ticks_s};
 
 // Simple_Infection::distance() needs to be public for this test
 /* TEST_CASE("Testing Simple_Infection::distance")
@@ -85,13 +88,16 @@ TEST_CASE("Testing Simple_Infection::sane_to_infected")
   CHECK(pop3.R == People{pers4});
 }
 
-float constexpr infection_probability_r = 0.F;
-float constexpr recovering_probability_r = 1.F;
+float constexpr infection_probability_r = 0.f;
+float constexpr mean_recovering_ticks_r = 0.F;  // da migliorare
+float constexpr sd_recoverty_ticks_r = 0.f;     // da migliorare
 
 TEST_CASE("Testing Simple_Infection::infected_to_recovered")
 {
-  Simple_Infection infection2 = {
-      limiting_distance, infection_probability_r, recovering_probability_r};
+  Simple_Infection infection2 = {limiting_distance,
+                                 infection_probability_r,
+                                 mean_recovering_ticks_r,
+                                 sd_recoverty_ticks_r};
 
   infection2.update(pop1, ticks);
   infection2.update(pop3, ticks);
