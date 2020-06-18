@@ -47,10 +47,7 @@ TEST_CASE("Testing make_sir_population")
   CHECK(pop1.S.begin()->position != Position{0., 0.});
 }
 
-Person pers1 = {
-    Position{1., 1.},
-    Velocity{0., 0.},
-};
+Person pers1 = {Position{1., 1.}, Velocity{0., 0.}};
 Person pers2 = {Position{5., 5.}, Velocity{0., 0.}};
 Person pers3 = {Position{5., 5.1}, Velocity{0., 0.}};
 Person pers4 = {Position{5.1, 5.}, Velocity{0., 0.}};

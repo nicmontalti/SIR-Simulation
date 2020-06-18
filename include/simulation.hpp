@@ -7,7 +7,7 @@
 
 class Simulation
 {
-  Simulation_State& state_;
+  Simulation_State state_;
   G_Motion& motion_;
   G_Infection& infection_;
 

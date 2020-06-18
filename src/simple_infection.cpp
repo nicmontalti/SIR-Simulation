@@ -6,18 +6,18 @@
 
 Simple_Infection::Simple_Infection(double limiting_distance,
                                    float infection_probability,
-                                   float mean_recovery_time)
+                                   float mean_recovery_ticks)
     : limiting_distance_{limiting_distance}
     , infection_probability_{infection_probability}
-    , mean_recovery_time_{mean_recovery_time}
+    , mean_recovery_ticks_{mean_recovery_ticks}
     , random_seed_{std::random_device{}()}
     , probability_distribution_{0.F, 1.F}
-    , recovery_time_distribution_{mean_recovery_time_, 1.F}
+    , recovery_ticks_distribution_{mean_recovery_ticks_, 1.F}
     , ticks_{0}
 {
   assert(limiting_distance_ > 0);
   assert(infection_probability_ >= 0 && infection_probability_ <= 1);
-  assert(mean_recovery_time_ >= 0);
+  assert(mean_recovery_ticks_ >= 0);
   }
 
 double Simple_Infection::distance(Person const& left, Person const& right)
@@ -31,7 +31,7 @@ void Simple_Infection::infect(Person& person){
 
   person.sub_status = Sub_Status::Infective;
   person.ticks_of_infection = ticks_;
-  person.ticks_of_recovery = ticks_ + recovery_time_distribution_(random_seed_);
+  person.ticks_of_recovery = ticks_ + recovery_ticks_distribution_(random_seed_);
 }
 
 void Simple_Infection::sane_to_infected(Population& population)

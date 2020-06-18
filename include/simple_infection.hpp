@@ -11,11 +11,11 @@ class Simple_Infection : public G_Infection
 {
   double const limiting_distance_;
   float const infection_probability_;
-  float const mean_recovery_time_;
+  float const mean_recovery_ticks_;
 
   std::mt19937 random_seed_;
   std::uniform_real_distribution<float> probability_distribution_;
-  std::normal_distribution<float> recovery_time_distribution_;
+  std::normal_distribution<float> recovery_ticks_distribution_;
 
   int ticks_;
 
