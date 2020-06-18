@@ -6,20 +6,24 @@
 
 Incubation_Infection::Incubation_Infection(double limiting_distance,
                                            float infection_probability,
-                                           float mean_recovery_time,
-                                           int incubation_time)
+                                           float mean_recovery_ticks,
+                                           float sd_recovery_ticks,
+                                           int incubation_ticks,
+                                           float quarantine_probability)
     : limiting_distance_{limiting_distance}
     , infection_probability_{infection_probability}
-    , mean_recovery_ticks_{mean_recovery_time}
-    , incubation_ticks_{incubation_time}
-    , random_seed_{std::random_device{}()}
-    , probability_distribution_{0.F, 1.F}
-    , recovery_ticks_distribution_{mean_recovery_ticks_, 1.F}
+    , mean_recovery_ticks_{mean_recovery_ticks}
+    , sd_recovery_ticks_{sd_recovery_ticks}
+    , incubation_ticks_{incubation_ticks}
+    , quarantine_probability_{quarantine_probability}
+    , random_gen_{}
+    , ticks_{0}
 {
   assert(limiting_distance_ > 0);
   assert(infection_probability_ >= 0 && infection_probability_ <= 1);
   assert(mean_recovery_ticks_ >= 0);
   assert(incubation_ticks_ >= 0);
+  random_gen_.SetSeed();
 }
 
 double Incubation_Infection::distance(Person const& left, Person const& right)
@@ -33,7 +37,8 @@ void Incubation_Infection::infect(Person& person)
 {
   person.sub_status = Sub_Status::Incubation;
   person.ticks_of_infection = ticks_;
-  person.ticks_of_recovery = ticks_ + recovery_ticks_distribution_(random_seed_);
+  person.ticks_of_recovery =
+      ticks_ + random_gen_.Gaus(mean_recovery_ticks_, sd_recovery_ticks_);
 }
 
 void Incubation_Infection::sane_to_infected(Population& population)
@@ -45,7 +50,7 @@ void Incubation_Infection::sane_to_infected(Population& population)
   auto check_infection = [&](Person const& infected) {
     if (infected.sub_status == Sub_Status::Infective) {
       if (distance(*it_sane, infected) < limiting_distance_) {
-        return probability_distribution_(random_seed_) < infection_probability_;
+        return random_gen_.Uniform(1.f) < infection_probability_;
       }
     }
     return false;
@@ -97,6 +102,11 @@ void Incubation_Infection::infected_to_recovered(Population& population)
       if (it_infected->sub_status == Sub_Status::Incubation &&
           it_infected->ticks_of_infection + incubation_ticks_ <= ticks_) {
         it_infected->sub_status = Sub_Status::Infective;
+      }
+
+      if (it_infected->sub_status == Sub_Status::Infective &&
+          random_gen_.Uniform(1.f) < quarantine_probability_) {
+        it_infected->sub_status = Sub_Status::Quarantined;
       }
 
       // Updating it_infected to next person to check

@@ -11,9 +11,11 @@ int constexpr S = 200;
 int constexpr I = 1;
 int constexpr R = 0;
 float constexpr infection_probability = 0.05f;
-float constexpr recovery_probability = 0.001f;
+float constexpr mean_recovery_ticks = 200.f;
+float constexpr sd_recovery_ticks = 20.f;
 float constexpr circle_radius = 5.f;
-int constexpr incubation_time = 100;
+int constexpr incubation_ticks = 100;
+float constexpr quarantine_probability = 0.20f;
 
 int main()
 {
@@ -21,8 +23,10 @@ int main()
   Random_Motion motion{0.1};
   Incubation_Infection infection{2 * circle_radius,
                                  infection_probability,
-                                 recovery_probability,
-                                 incubation_time};
+                                 mean_recovery_ticks,
+                                 sd_recovery_ticks,
+                                 incubation_ticks,
+                                 quarantine_probability};
   Simulation simulation{state, motion, infection};
   Display display{simulation.get_state(), circle_radius};
 

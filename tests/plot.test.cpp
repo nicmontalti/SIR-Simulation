@@ -9,7 +9,7 @@
 int main()
 {
   Random_Motion motion;
-  Simple_Infection infection(1, 1, 0.01);
+  Simple_Infection infection(1, 1, 200.f, 20.f);
   Simulation_State state{600, 100, 10, 0};
   Simulation simulation(state, motion, infection);
   Plot simplot(simulation.get_state());

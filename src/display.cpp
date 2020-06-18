@@ -69,8 +69,11 @@ void Display::draw_people(People const& people)
       case (Sub_Status::Infective):
         draw_person(person, sf::Color::Red);
         break;
-      case (Sub_Status::Recovered):
+      case (Sub_Status::Quarantined):
         draw_person(person, sf::Color::White);
+        break;
+      case (Sub_Status::Recovered):
+        draw_person(person, sf::Color::Blue);
         break;
       default:
         assert(false);

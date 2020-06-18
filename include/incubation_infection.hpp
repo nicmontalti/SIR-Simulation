@@ -1,9 +1,9 @@
 #ifndef SIR_INCUBATION_INFECTION_HPP
 #define SIR_INCUBATION_INFECTION_HPP
 
+#include <TRandom.h>
 #include <algorithm>
 #include <cassert>
-#include <random>
 #include "infection.hpp"
 #include "population.hpp"
 
@@ -12,11 +12,11 @@ class Incubation_Infection : public G_Infection
   double const limiting_distance_;
   float const infection_probability_;
   float const mean_recovery_ticks_;
+  float const sd_recovery_ticks_;
   int const incubation_ticks_;
+  float const quarantine_probability_;
 
-  std::mt19937 random_seed_;
-  std::uniform_real_distribution<float> probability_distribution_;
-  std::normal_distribution<float> recovery_ticks_distribution_;
+  TRandom random_gen_;
 
   int ticks_;
 
@@ -27,8 +27,10 @@ class Incubation_Infection : public G_Infection
  public:
   Incubation_Infection(double limiting_distance,
                        float infection_probability,
-                       float recovery_probability,
-                       int incubation_time);
+                       float mean_recovery_ticks,
+                       float sd_recovery_ticks,
+                       int incubation_ticks,
+                       float quarantine_probability);
 
   void update(Population& population, int ticks) override
   {

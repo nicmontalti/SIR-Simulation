@@ -16,7 +16,14 @@ struct Velocity
   double vy;
 };
 
-enum class Sub_Status { Sane, Incubation, Infective, Recovered };
+enum class Sub_Status {
+  Sane,
+  Incubation,
+  Infective,
+  Quarantined,
+  Recovered,
+  Dead
+};
 
 struct Person
 {
