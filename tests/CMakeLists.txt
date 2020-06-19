@@ -12,7 +12,7 @@ target_link_libraries(run_simple_infection_tests simulation simple_infection pop
 target_link_libraries(run_simple_infection_tests ROOT::MathCore)
 add_test(NAME simple_infection_tests COMMAND run_simple_infection_tests)
 
-add_executable(run_motion_tests motion.test.cpp)
+add_executable(run_motion_tests motion.test.cpp run_tests.cpp)
 target_link_libraries(run_motion_tests simulation motion population)
 target_link_libraries(run_motion_tests ROOT::MathCore)
 target_link_libraries(run_motion_tests sfml-graphics sfml-window sfml-system)
