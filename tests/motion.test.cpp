@@ -10,72 +10,79 @@ Population population{people, People(), People()};
 Simulation_State state(size, population);
 Random_Motion motion{sd_motion};
 
-TEST_CASE("Testing motion with sd = 0")
+TEST_CASE("Testing motion")
 {
-  CHECK(state.population.S[0].position.x == doctest::Approx(0.));
-  CHECK(state.population.S[0].position.y == doctest::Approx(0.));
+  SUBCASE("no acceleration (sd = 0)")
+  {
+    CHECK(state.population.S[0].position.x == doctest::Approx(0.));
+    CHECK(state.population.S[0].position.y == doctest::Approx(0.));
 
-  motion.update(state.population, state.size);
-  CHECK(state.population.S[0].position.x == doctest::Approx(0.));
-  CHECK(state.population.S[0].position.y == doctest::Approx(0.));
+    motion.update(state.population, state.size);
+    CHECK(state.population.S[0].position.x == doctest::Approx(0.));
+    CHECK(state.population.S[0].position.y == doctest::Approx(0.));
 
-  state.population.S[0].velocity.vx = 10.;
-  state.population.S[0].velocity.vy = 20.;
-  motion.update(state.population, state.size);
+    state.population.S[0].velocity.vx = 10.;
+    state.population.S[0].velocity.vy = 20.;
+    motion.update(state.population, state.size);
 
-  CHECK(state.population.S[0].velocity.vx ==
-        doctest::Approx(10.).epsilon(0.02));
-  CHECK(state.population.S[0].velocity.vy ==
-        doctest::Approx(20.).epsilon(0.02));
-  CHECK(state.population.S[0].position.x == doctest::Approx(10.).epsilon(0.02));
-  CHECK(state.population.S[0].position.y == doctest::Approx(20.).epsilon(0.02));
-}
+    CHECK(state.population.S[0].velocity.vx ==
+          doctest::Approx(10.).epsilon(0.02));
+    CHECK(state.population.S[0].velocity.vy ==
+          doctest::Approx(20.).epsilon(0.02));
+    CHECK(state.population.S[0].position.x ==
+          doctest::Approx(10.).epsilon(0.02));
+    CHECK(state.population.S[0].position.y ==
+          doctest::Approx(20.).epsilon(0.02));
+  }
 
-TEST_CASE("Testing friction")
-{
-  // v -= |v| * v / 10000
+  SUBCASE("friction")
+  {
+    // v -= |v| * v / 10000
 
-  state.population.S[0].position.x = 0.;
-  state.population.S[0].position.y = 0.;
-  state.population.S[0].velocity.vx = 100.;
-  state.population.S[0].velocity.vy = 200.;
-  motion.update(state.population, state.size);
+    state.population.S[0].position.x = 0.;
+    state.population.S[0].position.y = 0.;
+    state.population.S[0].velocity.vx = 100.;
+    state.population.S[0].velocity.vy = 200.;
+    motion.update(state.population, state.size);
 
-  CHECK(std::abs(state.population.S[0].velocity.vx) ==
-        doctest::Approx(99.).epsilon(0.01));
-  CHECK(std::abs(state.population.S[0].velocity.vy) ==
-        doctest::Approx(196.).epsilon(0.01));
-}
+    CHECK(std::abs(state.population.S[0].velocity.vx) ==
+          doctest::Approx(99.).epsilon(0.01));
+    CHECK(std::abs(state.population.S[0].velocity.vy) ==
+          doctest::Approx(196.).epsilon(0.01));
+  }
 
-TEST_CASE("Testing bouncing")
-{
-  state.population.S[0].position.x = 0.;
-  state.population.S[0].position.y = 0.;
-  state.population.S[0].velocity.vx = -10.;
-  state.population.S[0].velocity.vy = -20.;
-  motion.update(state.population, state.size);
+  SUBCASE("bouncing")
+  {
+    state.population.S[0].position.x = 0.;
+    state.population.S[0].position.y = 0.;
+    state.population.S[0].velocity.vx = -10.;
+    state.population.S[0].velocity.vy = -20.;
+    motion.update(state.population, state.size);
 
-  CHECK(state.population.S[0].velocity.vx ==
-        doctest::Approx(10.).epsilon(0.02));
-  CHECK(state.population.S[0].velocity.vy ==
-        doctest::Approx(20.).epsilon(0.02));
-  CHECK(state.population.S[0].position.x == doctest::Approx(0.).epsilon(0.02));
-  CHECK(state.population.S[0].position.y == doctest::Approx(0.).epsilon(0.02));
+    CHECK(state.population.S[0].velocity.vx ==
+          doctest::Approx(10.).epsilon(0.02));
+    CHECK(state.population.S[0].velocity.vy ==
+          doctest::Approx(20.).epsilon(0.02));
+    CHECK(state.population.S[0].position.x ==
+          doctest::Approx(0.).epsilon(0.02));
+    CHECK(state.population.S[0].position.y ==
+          doctest::Approx(0.).epsilon(0.02));
 
-  state.population.S[0].position.x = size;
-  state.population.S[0].position.y = size;
-  state.population.S[0].velocity.vx = 10.;
-  state.population.S[0].velocity.vy = 20.;
-  motion.update(state.population, state.size);
+    state.population.S[0].position.x = size;
+    state.population.S[0].position.y = size;
+    state.population.S[0].velocity.vx = 10.;
+    state.population.S[0].velocity.vy = 20.;
+    motion.update(state.population, state.size);
 
-  CHECK(state.population.S[0].velocity.vx ==
-        doctest::Approx(-10.).epsilon(0.02));
-  CHECK(state.population.S[0].velocity.vy ==
-        doctest::Approx(-20.).epsilon(0.02));
-  CHECK(state.population.S[0].position.x ==
-        doctest::Approx(size).epsilon(0.02));
-  CHECK(state.population.S[0].position.y ==
-        doctest::Approx(size).epsilon(0.02));
+    CHECK(state.population.S[0].velocity.vx ==
+          doctest::Approx(-10.).epsilon(0.02));
+    CHECK(state.population.S[0].velocity.vy ==
+          doctest::Approx(-20.).epsilon(0.02));
+    CHECK(state.population.S[0].position.x ==
+          doctest::Approx(size).epsilon(0.02));
+    CHECK(state.population.S[0].position.y ==
+          doctest::Approx(size).epsilon(0.02));
+  }
 }
 
 int constexpr S = 200;
@@ -97,7 +104,7 @@ double mean()
   return (sum / N);
 }
 
-TEST_CASE("Testing position, velocity and acceleration mean")
+TEST_CASE("Testing motion position, velocity and acceleration mean")
 {
   CHECK(mean() == doctest::Approx(size / 2).epsilon(0.1));
   for (int i = 0; i != 10; ++i) {
