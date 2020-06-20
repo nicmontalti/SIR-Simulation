@@ -27,42 +27,21 @@ inline bool operator==(Population const& left, Population const& right)
   return left.S == right.S && left.I == right.I && left.R == right.R;
 }
 
-double constexpr limiting_distance = 1.;
-
-int constexpr size = 20;
-int constexpr S = 10;
-int constexpr I = 3;
-int constexpr R = 5;
-
-int ticks = 0;
-
-Simulation_State state{size, S, I, R};
-Population& pop1 = state.population;
-
 TEST_CASE("Testing make_sir_population")
 {
+  int constexpr size = 20;
+  int constexpr S = 10;
+  int constexpr I = 3;
+  int constexpr R = 5;
+
+  Simulation_State state{size, S, I, R};
+  Population& pop1 = state.population;
+
   CHECK(pop1.S.size() == S);
   CHECK(pop1.I.size() == I);
   CHECK(pop1.R.size() == R);
   CHECK(pop1.S.begin()->position != Position{0., 0.});
 }
-
-Person pers1 = {Position{1., 1.}, Velocity{0., 0.}};
-Person pers2 = {Position{5., 5.}, Velocity{0., 0.}};
-Person pers3 = {Position{5., 5.1}, Velocity{0., 0.}};
-Person pers4 = {Position{5.1, 5.}, Velocity{0., 0.}};
-
-Population pop2 = {People{pers1, pers2}, People{pers3}, People{pers4}};
-Population pop3 = {People{pers2}, People{pers3}, People{pers4}};
-
-float constexpr infection_probability_s = 1.F;
-float constexpr mean_recovering_ticks_s = 100000.F;  // da migliorare
-float constexpr sd_recoverty_ticks_s = 0.f;          // da migliorare
-
-Simple_Infection infection = {limiting_distance,
-                              infection_probability_s,
-                              mean_recovering_ticks_s,
-                              sd_recoverty_ticks_s};
 
 // Simple_Infection::distance() needs to be public for this test
 /* TEST_CASE("Testing Simple_Infection::distance")
@@ -78,30 +57,61 @@ Simple_Infection infection = {limiting_distance,
   CHECK(infection.distance(pers7, pers8) == doctest::Approx(5.).epsilon(0.01));
 } */
 
-TEST_CASE("Testing Simple_Infection::sane_to_infected")
+TEST_CASE("Testing Simple_Infection")
 {
-  infection.update(pop2, ticks);
-  CHECK(pop2 == Population{People{pers1}, People{pers3, pers2}, People{pers4}});
-  infection.update(pop3, ticks);
-  CHECK(pop3.S.size() == 0);
-  CHECK(pop3.I == People{pers3, pers2});
-  CHECK(pop3.R == People{pers4});
-}
+  Person pers1 = {Position{1., 1.}, Velocity{0., 0.}};
+  Person pers2 = {Position{5., 5.}, Velocity{0., 0.}};
+  Person pers3 = {Position{5., 5.1}, Velocity{0., 0.}};
+  pers3.sub_status = Sub_Status::Infective;
+  pers3.ticks_of_infection = 0;
+  pers3.ticks_of_recovery = 2;
+  Person pers4 = {Position{5.1, 5.}, Velocity{0., 0.}};
+  pers4.sub_status = Sub_Status::Recovered;
+  pers4.ticks_of_infection = 0;
+  pers4.ticks_of_recovery = 0;
 
-float constexpr infection_probability_r = 0.f;
-float constexpr mean_recovering_ticks_r = 0.F;  // da migliorare
-float constexpr sd_recoverty_ticks_r = 0.f;     // da migliorare
+  Population pop1 = {People{pers1, pers2}, People{pers3}, People{pers4}};
+  Population pop2 = {People{pers2}, People{pers3}, People{pers4}};
 
-TEST_CASE("Testing Simple_Infection::infected_to_recovered")
-{
-  Simple_Infection infection2 = {limiting_distance,
-                                 infection_probability_r,
-                                 mean_recovering_ticks_r,
-                                 sd_recoverty_ticks_r};
+  double constexpr limiting_distance = 1.;
+  float constexpr infection_probability_s = 1.F;
+  float constexpr mean_recovering_ticks_s = 1.F;
+  float constexpr sd_recoverty_ticks_s = 1.f;
 
-  infection2.update(pop1, ticks);
-  infection2.update(pop3, ticks);
-  CHECK(pop3.S == People{});
-  CHECK(pop3.I == People{});
-  CHECK(pop3.R == People{pers4, pers3, pers2});
+  Simple_Infection infection = {limiting_distance,
+                                infection_probability_s,
+                                mean_recovering_ticks_s,
+                                sd_recoverty_ticks_s};
+
+  infection.update(pop1, 1);
+  infection.update(pop2, 1);
+  SUBCASE("sane_to_infected")
+  {
+    CHECK(pop1 ==
+          Population{People{pers1}, People{pers3, pers2}, People{pers4}});
+    
+    CHECK(pop2.S == People{});
+    CHECK(pop2.I == People{pers3, pers2});
+    CHECK(pop2.R == People{pers4});
+  }
+
+  SUBCASE("infected_to_recovered")
+  {
+    pop2.I.back().ticks_of_recovery = 4;
+
+    infection.update(pop2, 2);
+    CHECK(pop2.S.size() == 0);
+    CHECK(pop2.I.size() == 1);
+    CHECK(pop2.R == People{pers4, pers3});
+
+    infection.update(pop2, 3);
+    CHECK(pop2.S.size() == 0);
+    CHECK(pop2.I.size() == 1);
+    CHECK(pop2.R == People{pers4, pers3});
+
+    infection.update(pop2, 4);
+    CHECK(pop2.S.size() == 0);
+    CHECK(pop2.I.size() == 0);
+    CHECK(pop2.R == People{pers4, pers3, pers2});
+  }
 }
