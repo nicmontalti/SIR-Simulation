@@ -14,7 +14,7 @@ Display::Display(Simulation_State const& state, float circle_radius)
     , window_(
           sf::VideoMode(state_.size + 2 * circle_radius_ + 2 * window_border,
                         state_.size + 2 * circle_radius_ + 2 * window_border),
-          "SIR Simulation")
+          "SIR Simulation Display")
 {
   assert(circle_.getRadius() == circle_radius_);
   assert(window_.getSize().x == window_.getSize().y);

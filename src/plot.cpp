@@ -26,16 +26,14 @@ Plot::Plot(Simulation_State const& state)
   // ((TRootCanvas*)canvas_.GetCanvasImp())
   //     ->Disconnect((TRootCanvas*)canvas_.GetCanvasImp());
 
-  canvas_.SetTitle("SIR Simulation");
+  canvas_.SetTitle("SIR Simulation Plot");
 
-  // initializing graphs with different colors
   init_graph(S_graph_, kGreen);
   init_graph(I_graph_, kRed);
   init_graph(R_graph_, kBlue);
 
   multi_graph_.SetTitle("SIR Simulation");
 
-  // combining graphs in a multigraph
   multi_graph_.Add(&S_graph_);
   multi_graph_.Add(&I_graph_);
   multi_graph_.Add(&R_graph_);
@@ -43,14 +41,11 @@ Plot::Plot(Simulation_State const& state)
   // drawing multigraph with axis (A) and points connected by a smooth line (C)
   multi_graph_.Draw("AC");
 
-  // creating and drawing a legend
   legend_.AddEntry(&S_graph_, "Sane");
   legend_.AddEntry(&I_graph_, "Infected");
   legend_.AddEntry(&R_graph_, "Recovered");
   legend_.Draw();
 
-  // adding starting values to graphs
-  // updating canvas
   update();
 }
 
@@ -63,7 +58,6 @@ void Plot::init_graph(TGraph& graph, int color)
 
 void Plot::update()
 {
-  // adding a new point at the end of graphs
   int new_point_index = S_graph_.GetN();
   assert(new_point_index == I_graph_.GetN() &&
          new_point_index == R_graph_.GetN());
@@ -72,7 +66,6 @@ void Plot::update()
   I_graph_.SetPoint(new_point_index, state_.ticks, state_.population.I.size());
   R_graph_.SetPoint(new_point_index, state_.ticks, state_.population.R.size());
 
-  // setting display range of x axis
   multi_graph_.GetXaxis()->SetRange(0., state_.ticks);
 
   update_canvas();
@@ -80,7 +73,6 @@ void Plot::update()
 
 void Plot::update_canvas()
 {
-  // updating canvas with new graphs
   canvas_.Update();
 
   // process interactions with the application
@@ -96,12 +88,10 @@ void Plot::fit()
 
 void Plot::save()
 {
-  // save graphs in a ROOT file
   TFile root_file("SIR_graph.root", "recreate");
   multi_graph_.Write();
   root_file.Close();
 
-  // save SIR datas in a CSV file
   std::ofstream csv_file{"SIR_data.csv"};
   csv_file << "Ticks, Sane, Infected, Recovered\n";
   int N_points = S_graph_.GetN();
