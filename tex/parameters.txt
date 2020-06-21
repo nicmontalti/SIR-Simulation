@@ -1,0 +1,14 @@
+int constexpr size = 600;
+int constexpr S = 400;
+int constexpr I = 10;
+int constexpr R = 0;
+
+simple_0.05
+float constexpr infection_probability = 0.05f;
+float constexpr mean_recovery_ticks = 200.f;
+float constexpr sd_recovery_ticks = 50.f;
+float constexpr circle_radius = 5.f;
+double constexpr motion_std = 0.1;
+
+simple_0.07
+float constexpr infection_probability = 0.07f;
