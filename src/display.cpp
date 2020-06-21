@@ -4,6 +4,8 @@
 #include <chrono>
 #include <thread>
 
+using namespace sir;
+
 int constexpr window_border = 20;
 
 Display::Display(Simulation_State const& state, float circle_radius)

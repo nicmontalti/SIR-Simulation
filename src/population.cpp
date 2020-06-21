@@ -4,6 +4,8 @@
 #include <cassert>
 #include <vector>
 
+using namespace sir;
+
 Simulation_State::Simulation_State(int i_size, int S, int I, int R)
     : size{i_size}
     , population{Population{People(S), People(I), People(R)}}

@@ -4,6 +4,8 @@
 #include <cassert>
 #include <vector>
 
+namespace sir {
+
 struct Position
 {
   double x;
@@ -16,14 +18,7 @@ struct Velocity
   double vy;
 };
 
-enum class Sub_Status {
-  Sane,
-  Incubation,
-  Infective,
-  Quarantined,
-  Recovered,
-  Dead
-};
+enum class Sub_Status { Sane, Incubation, Infective, Quarantined, Recovered };
 
 struct Person
 {
@@ -57,5 +52,7 @@ struct Simulation_State
   }
   Simulation_State(int i_size, int S, int I, int R);
 };
+
+}  // namespace sir
 
 #endif

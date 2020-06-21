@@ -2,6 +2,8 @@
 #include "population.hpp"
 #include "random_motion.hpp"
 
+using namespace sir;
+
 int constexpr size = 100;
 double constexpr sd_motion = 0.;
 

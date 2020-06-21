@@ -11,6 +11,8 @@
 #include <fstream>
 #include "simulation.hpp"
 
+using namespace sir;
+
 Plot::Plot(Simulation_State const& state)
     : state_{state}
     , app_{"", nullptr, nullptr}

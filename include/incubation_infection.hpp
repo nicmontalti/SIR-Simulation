@@ -7,6 +7,8 @@
 #include "infection.hpp"
 #include "population.hpp"
 
+namespace sir {
+
 class Incubation_Infection : public G_Infection
 {
   double const limiting_distance_;
@@ -45,5 +47,7 @@ class Incubation_Infection : public G_Infection
   }
   double distance(Person const&, Person const&);
 };
+
+}  // namespace sir
 
 #endif

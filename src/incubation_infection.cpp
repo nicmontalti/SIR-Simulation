@@ -4,6 +4,8 @@
 #include <cmath>
 #include <iterator>
 
+using namespace sir;
+
 Incubation_Infection::Incubation_Infection(double limiting_distance,
                                            float infection_probability,
                                            float mean_recovery_ticks,

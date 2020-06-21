@@ -6,6 +6,8 @@
 #include "motion.hpp"
 #include "population.hpp"
 
+namespace sir {
+
 class Random_Motion : public G_Motion
 {
   double const sd_;
@@ -46,5 +48,7 @@ class Random_Motion : public G_Motion
     std::for_each(population.R.begin(), population.R.end(), move);
   }
 };
+
+}  // namespace sir
 
 #endif

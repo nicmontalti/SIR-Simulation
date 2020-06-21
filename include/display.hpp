@@ -4,6 +4,8 @@
 #include <SFML/Graphics.hpp>
 #include "simulation.hpp"
 
+namespace sir {
+
 class Display
 {
   Simulation_State const& state_;
@@ -25,5 +27,7 @@ class Display
     return window_.isOpen();
   }
 };
+
+}  // namespace sir
 
 #endif

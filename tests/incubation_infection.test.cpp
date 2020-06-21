@@ -2,6 +2,8 @@
 #include "incubation_infection.hpp"
 #include "population.hpp"
 
+namespace sir {
+
 bool operator==(Position const& left, Position const& right)
 {
   return left.x == right.x && left.y == right.y;
@@ -22,10 +24,14 @@ bool operator==(Person const& left, Person const& right)
   return left.position == right.position && left.velocity == right.velocity;
 }
 
-inline bool operator==(Population const& left, Population const& right)
+bool operator==(Population const& left, Population const& right)
 {
   return left.S == right.S && left.I == right.I && left.R == right.R;
 }
+
+}  // namespace sir
+
+using namespace sir;
 
 TEST_CASE("Testing Incubation_infection")
 {

@@ -9,6 +9,8 @@
 #include "TLegend.h"
 #include "simulation.hpp"
 
+namespace sir {
+
 class Plot
 {
   Simulation_State const& state_;
@@ -40,5 +42,7 @@ class Plot
   void fit();
   void save();
 };
+
+}  // namespace sir
 
 #endif

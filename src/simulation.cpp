@@ -7,6 +7,8 @@
 #include "motion.hpp"
 #include "population.hpp"
 
+using namespace sir;
+
 bool Simulation::check_everyone_position() const
 {
   auto const check_position = [=](Person const& person) {

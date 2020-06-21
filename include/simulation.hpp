@@ -5,6 +5,8 @@
 #include "motion.hpp"
 #include "population.hpp"
 
+namespace sir {
+
 class Simulation
 {
   Simulation_State state_;
@@ -17,11 +19,17 @@ class Simulation
   Simulation(Simulation_State& state, G_Motion& motion, G_Infection& infection);
 
   void evolve();
+  bool is_over()
+  {
+    return state_.population.I.size() == 0;
+  }
 
   Simulation_State const& get_state() const
   {
     return state_;
   }
 };
+
+}  // namespace sir
 
 #endif

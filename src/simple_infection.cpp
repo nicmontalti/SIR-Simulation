@@ -4,6 +4,8 @@
 #include <cmath>
 #include <iterator>
 
+using namespace sir;
+
 Simple_Infection::Simple_Infection(double limiting_distance,
                                    float infection_probability,
                                    float mean_recovery_ticks,
