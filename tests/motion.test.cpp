@@ -69,6 +69,8 @@ TEST_CASE("Testing motion")
           doctest::Approx(0.).epsilon(0.02));
     CHECK(state.population.S[0].position.y ==
           doctest::Approx(0.).epsilon(0.02));
+    CHECK(state.population.S[0].position.x >= 0.);
+    CHECK(state.population.S[0].position.y >= 0.);
 
     state.population.S[0].position.x = size;
     state.population.S[0].position.y = size;
@@ -81,9 +83,11 @@ TEST_CASE("Testing motion")
     CHECK(state.population.S[0].velocity.vy ==
           doctest::Approx(-20.).epsilon(0.02));
     CHECK(state.population.S[0].position.x ==
-          doctest::Approx(size).epsilon(0.02));
+          doctest::Approx(state.size).epsilon(0.02));
     CHECK(state.population.S[0].position.y ==
-          doctest::Approx(size).epsilon(0.02));
+          doctest::Approx(state.size).epsilon(0.02));
+    CHECK(state.population.S[0].position.x <= state.size);
+    CHECK(state.population.S[0].position.x <= state.size);
   }
 }
 
