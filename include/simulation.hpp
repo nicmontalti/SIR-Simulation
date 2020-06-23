@@ -13,12 +13,10 @@ class Simulation
   G_Motion& motion_;
   G_Infection& infection_;
 
-  bool check_everyone_position() const;
-
  public:
   Simulation(Simulation_State& state, G_Motion& motion, G_Infection& infection);
 
-  void evolve();
+  void update();
   bool is_over()
   {
     return state_.population.I.size() == 0;

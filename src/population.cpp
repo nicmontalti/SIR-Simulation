@@ -1,8 +1,6 @@
 #include "population.hpp"
 #include <TRandom.h>
 #include <algorithm>
-#include <cassert>
-#include <vector>
 
 using namespace sir;
 
@@ -43,4 +41,23 @@ Simulation_State::Simulation_State(int i_size, int S, int I, int R)
   std::generate(population.R.begin(),
                 population.R.end(),
                 New_Person(size, Sub_Status::Recovered));
+  
+  check_everyone_position();
+}
+
+bool Simulation_State::check_everyone_position() const
+{
+  auto const check_position = [=](Person const& person) {
+    return (person.position.x >= 0 && person.position.x <= size &&
+            person.position.y >= 0 && person.position.y <= size);
+  };
+
+  auto const check_people_position = [&](People const& people) {
+    auto it = std::find_if_not(people.begin(), people.end(), check_position);
+    return (it == people.end());
+  };
+
+  return check_people_position(population.S) &&
+         check_people_position(population.I) &&
+         check_people_position(population.R);
 }

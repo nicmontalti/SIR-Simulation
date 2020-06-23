@@ -49,8 +49,11 @@ struct Simulation_State
   {
     assert(size > 0);
     assert(ticks >= 0);
+    check_everyone_position();
   }
   Simulation_State(int i_size, int S, int I, int R);
+
+  bool check_everyone_position() const;
 };
 
 }  // namespace sir
