@@ -1,7 +1,5 @@
 #include "simple_infection.hpp"
-#include <algorithm>
 #include <cassert>
-#include <cmath>
 #include <iterator>
 
 using namespace sir;

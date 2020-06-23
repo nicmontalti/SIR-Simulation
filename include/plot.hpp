@@ -7,7 +7,7 @@
 #include <TMultiGraph.h>
 #include <TRootCanvas.h>
 #include "TLegend.h"
-#include "simulation.hpp"
+#include "population.hpp"
 
 namespace sir {
 

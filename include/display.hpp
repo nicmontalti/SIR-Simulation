@@ -2,7 +2,7 @@
 #define SIR_DISPLAY_HPP
 
 #include <SFML/Graphics.hpp>
-#include "simulation.hpp"
+#include "population.hpp"
 
 namespace sir {
 

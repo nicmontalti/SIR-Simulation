@@ -1,15 +1,8 @@
 #include "plot.hpp"
-#include <TApplication.h>
 #include <TAxis.h>
-#include <TCanvas.h>
 #include <TFile.h>
-#include <TGraph.h>
-#include <TLegend.h>
-#include <TMultiGraph.h>
-#include <TRootCanvas.h>
 #include <TSystem.h>
 #include <fstream>
-#include "simulation.hpp"
 
 using namespace sir;
 

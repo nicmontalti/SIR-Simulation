@@ -3,7 +3,6 @@
 
 #include <TRandom.h>
 #include <algorithm>
-#include <cassert>
 #include "infection.hpp"
 #include "population.hpp"
 

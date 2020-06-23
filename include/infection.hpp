@@ -8,7 +8,7 @@ namespace sir {
 class G_Infection
 {
  public:
-  void virtual update(Population&, int ticks) = 0;
+  virtual void update(Population& population, int ticks) = 0;
 };
 
 }  // namespace sir

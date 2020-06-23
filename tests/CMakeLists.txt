@@ -4,7 +4,7 @@ add_link_options(-fsanitize=address)
 
 
 add_executable(run_motion_tests motion.test.cpp run_tests.cpp)
-target_link_libraries(run_motion_tests simulation motion population)
+target_link_libraries(run_motion_tests simulation random_motion population)
 target_link_libraries(run_motion_tests ROOT::MathCore)
 add_test(NAME motion_test COMMAND run_motion_tests)
 

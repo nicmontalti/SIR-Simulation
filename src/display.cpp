@@ -1,8 +1,5 @@
 #include "display.hpp"
-#include <SFML/Graphics.hpp>
 #include <cassert>
-#include <chrono>
-#include <thread>
 
 using namespace sir;
 

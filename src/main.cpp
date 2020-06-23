@@ -3,7 +3,6 @@
 #include "display.hpp"
 #include "incubation_infection.hpp"
 #include "plot.hpp"
-#include "population.hpp"
 #include "random_motion.hpp"
 #include "simple_infection.hpp"
 #include "simulation.hpp"
@@ -37,7 +36,7 @@ int main()
   while (display.is_open() && !simulation.is_over()) {
     auto time = std::chrono::system_clock::now();
 
-    simulation.evolve();
+    simulation.update();
 
     display.update();
     if (simulation.get_state().ticks % 5 == 0) {
