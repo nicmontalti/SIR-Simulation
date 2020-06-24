@@ -51,6 +51,7 @@ void Display::draw_person(Person const& person, sf::Color const& color)
   circle_.setFillColor(color);
   circle_.setOrigin(sf::Vector2f(circle_radius_, circle_radius_));
   circle_.setPosition(person.position.x, person.position.y);
+
   move_inside_borders(circle_);
   window_.draw(circle_);
 }

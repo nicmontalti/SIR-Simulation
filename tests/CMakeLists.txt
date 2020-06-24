@@ -4,16 +4,16 @@ add_link_options(-fsanitize=address)
 
 
 add_executable(run_motion_tests motion.test.cpp run_tests.cpp)
-target_link_libraries(run_motion_tests simulation random_motion population)
+target_link_libraries(run_motion_tests simulation random_motion)
 target_link_libraries(run_motion_tests ROOT::MathCore)
 add_test(NAME motion_test COMMAND run_motion_tests)
 
 add_executable(run_simple_infection_tests simple_infection.test.cpp run_tests.cpp)
-target_link_libraries(run_simple_infection_tests simulation simple_infection population)
+target_link_libraries(run_simple_infection_tests simulation simple_infection)
 target_link_libraries(run_simple_infection_tests ROOT::MathCore)
 add_test(NAME simple_infection_tests COMMAND run_simple_infection_tests)
 
 add_executable(run_incubation_infection_tests incubation_infection.test.cpp run_tests.cpp)
-target_link_libraries(run_incubation_infection_tests simulation incubation_infection population)
+target_link_libraries(run_incubation_infection_tests simulation incubation_infection)
 target_link_libraries(run_incubation_infection_tests ROOT::MathCore)
 add_test(NAME incubation_infection_tests COMMAND run_incubation_infection_tests)

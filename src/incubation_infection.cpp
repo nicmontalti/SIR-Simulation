@@ -22,7 +22,10 @@ Incubation_Infection::Incubation_Infection(double limiting_distance,
   assert(limiting_distance_ > 0);
   assert(infection_probability_ >= 0 && infection_probability_ <= 1);
   assert(mean_recovery_ticks_ >= 0);
+  assert(sd_recovery_ticks_ >= 0);
   assert(incubation_ticks_ >= 0);
+  assert(quarantine_probability_ >= 0 && quarantine_probability_ <= 1);
+
   random_gen_.SetSeed();
 }
 
@@ -61,6 +64,7 @@ void Incubation_Infection::sane_to_infected(Population& population)
   while (it_sane != last_sane) {
     auto first_to_check = population.I.begin();
     auto check_end = next(first_to_check, n_infected_to_check);
+
     bool has_been_infected =
         std::find_if(first_to_check, check_end, check_infection) != check_end;
 
@@ -86,6 +90,7 @@ void Incubation_Infection::infected_to_recovered(Population& population)
 {
   auto it_infected = population.I.begin();
   auto last_infected = population.I.end();
+
   while (it_infected != last_infected) {
     if (it_infected->ticks_of_recovery <= ticks_) {
       it_infected->sub_status = Sub_Status::Recovered;

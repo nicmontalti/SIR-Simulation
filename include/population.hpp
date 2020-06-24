@@ -38,24 +38,6 @@ struct Population
   People R;
 };
 
-struct Simulation_State
-{
-  int const size;
-  Population population;
-  int ticks;
-
-  Simulation_State(int i_size, Population i_population = Population{})
-      : size{i_size}, population{i_population}, ticks{0}
-  {
-    assert(size > 0);
-    assert(ticks >= 0);
-    check_everyone_position();
-  }
-  Simulation_State(int i_size, int S, int I, int R);
-
-  bool check_everyone_position() const;
-};
-
 }  // namespace sir
 
 #endif

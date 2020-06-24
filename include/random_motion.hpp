@@ -3,7 +3,6 @@
 
 #include <TRandom.h>
 #include "motion.hpp"
-#include "population.hpp"
 
 namespace sir {
 
@@ -13,12 +12,14 @@ class Random_Motion : public G_Motion
   TRandom random_generator_;
 
  public:
-  Random_Motion(double sd = 1) : sd_{sd}, random_generator_{}
+  Random_Motion(double sd = 0.1) : sd_{sd}, random_generator_{}
   {
+    assert(sd_ >= 0);
     random_generator_.SetSeed();
   }
   void update(Population& population, int size) override;
 };
+
 }  // namespace sir
 
 #endif

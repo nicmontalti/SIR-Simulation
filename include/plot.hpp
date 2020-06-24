@@ -7,7 +7,7 @@
 #include <TMultiGraph.h>
 #include <TRootCanvas.h>
 #include "TLegend.h"
-#include "population.hpp"
+#include "simulation.hpp"
 
 namespace sir {
 
@@ -34,12 +34,9 @@ class Plot
     ((TRootCanvas*)canvas_.GetCanvasImp())
         ->Connect("CloseWindow()", "TApplication", &app_, "Terminate()");
     app_.Run(kFALSE);
-    // app_.SetReturnFromRun(kTRUE);
-    // app_.Terminate();
   }
 
   void update();
-  void fit();
   void save();
 };
 

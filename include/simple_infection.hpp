@@ -4,7 +4,6 @@
 #include <TRandom.h>
 #include <algorithm>
 #include "infection.hpp"
-#include "population.hpp"
 
 namespace sir {
 
@@ -19,6 +18,7 @@ class Simple_Infection : public G_Infection
 
   int ticks_;
 
+  double distance(Person const&, Person const&);
   void infect(Person& person);
   void sane_to_infected(Population& population);
   void infected_to_recovered(Population& population);
@@ -40,7 +40,6 @@ class Simple_Infection : public G_Infection
     infected_to_recovered(population);
     sane_to_infected(population);
   }
-  double distance(Person const&, Person const&);
 };
 
 }  // namespace sir

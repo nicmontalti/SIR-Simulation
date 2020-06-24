@@ -16,10 +16,10 @@ Plot::Plot(Simulation_State const& state)
     , R_graph_{0}
     , multi_graph_{}
 {
-  // app_.SetReturnFromRun(kTRUE);
-  // terminate application by closing canvas (pressing on the 'x')
-  // ((TRootCanvas*)canvas_.GetCanvasImp())
-  //     ->Disconnect((TRootCanvas*)canvas_.GetCanvasImp());
+  // terminate application pressing x button
+  app_.SetReturnFromRun(kFALSE);
+  ((TRootCanvas*)canvas_.GetCanvasImp())
+      ->Connect("CloseWindow()", "TApplication", &app_, "Terminate()");
 
   canvas_.SetTitle("SIR Simulation Plot");
 
@@ -27,7 +27,7 @@ Plot::Plot(Simulation_State const& state)
   init_graph(I_graph_, kRed);
   init_graph(R_graph_, kBlue);
 
-  multi_graph_.SetTitle("SIR Simulation");
+  multi_graph_.SetTitle("SIR Simulation; Ticks; People");
 
   multi_graph_.Add(&S_graph_);
   multi_graph_.Add(&I_graph_);
@@ -73,12 +73,6 @@ void Plot::update_canvas()
   // process interactions with the application
   // (click, menu, close...)
   gSystem->ProcessEvents();
-}
-
-void Plot::fit()
-{
-  S_graph_.Fit("gaus");
-  update_canvas();
 }
 
 void Plot::save()

@@ -18,6 +18,7 @@ Simple_Infection::Simple_Infection(double limiting_distance,
   assert(limiting_distance_ > 0);
   assert(infection_probability_ >= 0 && infection_probability_ <= 1);
   assert(mean_recovery_ticks_ >= 0);
+  assert(sd_recovery_ticks_ >= 0);
 }
 
 double Simple_Infection::distance(Person const& left, Person const& right)
@@ -78,6 +79,7 @@ void Simple_Infection::infected_to_recovered(Population& population)
 {
   auto it_infected = population.I.begin();
   auto last_infected = population.I.end();
+
   while (it_infected != last_infected) {
     if (it_infected->ticks_of_recovery <= ticks_) {
       it_infected->sub_status = Sub_Status::Recovered;

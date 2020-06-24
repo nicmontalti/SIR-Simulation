@@ -1,6 +1,6 @@
 #include "doctest.h"
-#include "population.hpp"
 #include "random_motion.hpp"
+#include "simulation.hpp"
 
 using namespace sir;
 

@@ -7,6 +7,25 @@
 
 namespace sir {
 
+struct Simulation_State
+{
+  int const size;
+  Population population;
+  int ticks;
+
+  Simulation_State(int i_size, Population i_population = Population{})
+      : size{i_size}, population{i_population}, ticks{0}
+  {
+    assert(size > 0);
+    assert(ticks >= 0);
+    assert(check_everyone_position());
+  }
+
+  Simulation_State(int i_size, int S, int I, int R);
+
+  bool check_everyone_position() const;
+};
+
 class Simulation
 {
   Simulation_State state_;
@@ -17,6 +36,7 @@ class Simulation
   Simulation(Simulation_State& state, G_Motion& motion, G_Infection& infection);
 
   void update();
+
   bool is_over()
   {
     return state_.population.I.size() == 0;
