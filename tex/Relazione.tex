@@ -4,7 +4,6 @@
 \usepackage[italian]{babel}
 \usepackage[top=3cm, bottom=3cm, left=2.5cm, right=2.5cm]{geometry}
 \usepackage{graphicx}
-\graphicspath{ ./images/} 
 \usepackage{subfig}
 \usepackage{dblfloatfix}
 \usepackage[hidelinks]{hyperref}
@@ -21,20 +20,20 @@
 Il progetto consiste in una libreria dedicata allo sviluppo di simulazioni basate sul modello SIR. 
 
 \subsection*{Organizzazione del codice}
-Il codice è stato sviluppato collaborando su GitHub. La repository è pubblica e liberamente consultabile al link in \cite{bib:GitHub}.
+Il codice è stato sviluppato collaborando su GitHub. La repository è stata resa pubblica ed è liberamente consultabile al link in bibliografia \cite{bib:GitHub}.
 
-Il sorgente è suddiviso in tre cartelle: include, src e tests. Le dichiarazione delle classi sono contenute negli header all'interno di include/, mentre la loro implementazione è nei cpp contenuti in src/. Tutti i file utili al testing sono invece raggruppati in tests/. Infine, una copia di questa relazione è contenuta nella cartella tex/.
+Il sorgente è suddiviso in tre cartelle: include, src e tests. Le dichiarazioni delle classi sono contenute negli header all'interno di include/, mentre la loro implementazione è nei cpp contenuti in src/. Tutti i file utili al testing sono invece raggruppati in tests/. Infine, una copia di questa relazione è contenuta nella cartella tex/.
 
 \subsection*{Struttura del programma}
 \subsubsection*{La popolazione}
-La simulazione ha come “attori” istanze di \emph{Person}. Una \emph{Person} contiene una posizione, una velocità ed alcune informazioni relative allo stato di infezione. In particolare la variabile membro \emph{Sub Status} è un enumeratore che definisce una sotto categoria di S, I o R. Ad esempio, gli infetti sono divisi in \emph{incubation}, per le quali il virus è nella fase di incubazione, \emph{infective}, cioè in grado di infettare altre persone, e \emph{quarantined}, cioè in quarantena. Ogni \emph{Person} è contenuta in un std::vector<Person>, che ha come alias \emph{People}. Infine, lo struct \emph{Population}, che rappresenta l’intera popolazione, contiene tre oggetti \emph{People} denominati rispettivamente S, I e R. I \emph{Person} contenuti in S sono considerati sani, quelli contenuti in I infetti e quelli in R recuperati.
+La simulazione ha come “attori” istanze di \emph{Person}. Una \emph{Person} contiene una posizione, una velocità ed alcune informazioni relative allo stato di infezione. In particolare, la variabile membro \emph{Sub Status} è un enumeratore che definisce una sotto categoria di S, I o R. Ad esempio, gli infetti sono divisi in \emph{incubation}, per le quali il virus è nella fase di incubazione, \emph{infective}, cioè in grado di infettare altre persone, e \emph{quarantined}, cioè in quarantena. Ogni \emph{Person} è contenuta in un std::vector<Person>, che ha come alias \emph{People}. Infine, lo struct \emph{Population}, che rappresenta l’intera popolazione, contiene tre oggetti \emph{People} denominati rispettivamente S, I e R. I \emph{Person} contenuti in S sono considerati sani, quelli contenuti in I infetti e quelli in R recuperati.
 
 \subsubsection*{La simulazione}
 La classe che permette all’utente di creare e far avanzare la simulazione è \emph{Simulation}. La classe ha tre variabili membro private, che vengono inizializzate dal costruttore:
 \begin{itemize}
-    \item Simulation\_State state: contiene tutte le informazioni riguardanti lo stato della simulazione
-    \item G\_ Motion\& motion: referenza al modulo che implementa il movimento della popolazione
-    \item G\_ Infection\& infection: referenza al modulo che implementa l’evoluzione dell’infezione
+    \item \emph{Simulation\_State} state: contiene tutte le informazioni riguardanti lo stato della simulazione
+    \item \emph{G\_Motion}\& motion: referenza al modulo che implementa il movimento della popolazione
+    \item \emph{G\_Infection}\& infection: referenza al modulo che implementa l’evoluzione dell’infezione
 \end{itemize}
 
 \emph{Simulation State} è uno struct che contiene un’istanza di \emph{Population}, la dimensione dello spazio della simulazione e il tempo a cui fa riferimento quello stato. Lo spazio in cui avviene la simulazione è stato modellizzato come un piano cartesiano di estremi 0 e \emph{size} su entrambi gli assi; una persona in un \emph{Simulation State} deve sempre trovarsi all’interno di questo spazio. Il tempo è invece stato discretizzato in ticks interi; i ticks di un \emph{Simulation State} non possono diminuire.
@@ -43,11 +42,11 @@ La classe che permette all’utente di creare e far avanzare la simulazione è \
 
 Prima di inizializzare un’istanza di \emph{Simulation}, l’utente deve creare due istanze di classi che implementano rispettivamente \emph{G Motion} e \emph{G Infection} e un \emph{Simulation State} iniziale. A questo punto è possibile creare un’istanza di \emph{Simulation} passando i tre oggetti come parametri al costruttore.
 
-\emph{Simulation} ha a sua volta una funzione membro pubblica \emph{update()}, che chiama gli \emph{update} delle istanze di \emph{G Motion} e \emph{G Infection} e incrementa i ticks. In questo modo l’utente, dopo aver creato l’istanza di \emph{Simulation}, deve solo chiamare \emph{Simulation::update()} per far progredire la simulazione di un tick alla volta.
+\emph{Simulation} ha a sua volta una funzione membro pubblica \emph{update()}, che chiama gli \emph{update()} delle istanze di \emph{G Motion} e \emph{G Infection} e incrementa i ticks. In questo modo l’utente, dopo aver creato l’istanza di \emph{Simulation}, deve solo chiamare \emph{Simulation::update()} per far progredire la simulazione di un tick alla volta.
 \emph{Simulation} ha inoltre una funzione membro pubblica \emph{is\_over()} che ritorna true se non ci sono più infetti nella popolazione.
 
 \subsubsection*{Output grafico}
-La libreria mette a disposizione due classi per visualizzare l’andamento della simulazione. La spiegazione dettagliata degli output, con alcuni esempi, è fornita nella sezione Risultati (\ref{sec:risultati}).
+La libreria mette a disposizione due classi per visualizzare l’andamento della simulazione. La spiegazione dettagliata degli output, con alcuni esempi, è fornita nella sezione Risultati.
 
 Le due classi che gestiscono la grafica sono \emph{Display} e \emph{Plot}. \emph{Display}, basata sulla libreria grafica SFML, permette di visualizzare in tempo reale i \emph{Person} come cerchi colorati che si muovono in un piano. \emph{Plot}, basata sul framework di ROOT, permette invece di visualizzare in tempo reale un grafico con l’andamento del numero di sani, infetti e recuperati. Tramite la funzione membro \emph{Plot::save()} è inoltre possibile salvare il grafico come RootFile e i dati dell’andamento come csv.
 
@@ -64,7 +63,7 @@ La compilazione è gestita tramite CMake. Per compilare il codice è sufficiente
     make
 \end{verbatim}
 
-Affinché la compilazione abbia successo, è necessario avere installato sul proprio computer CMake 3.16 o superiore \cite{bib:CMake}, SFML 2.5 o superiore \cite{bib:SFML} e ROOT \cite{bib:ROOT}. Il programma è stato testato su Ubuntu 18.04 LTS e Ubuntu 20.04 LTS. Si suggerisce di utilizzare quest'ultima versione, se possibile, per via della maggior compatibilità con SFML 2.5.
+Affinché la compilazione abbia successo, è necessario avere installato sulla propria macchina CMake 3.16 o superiore \cite{bib:CMake}, SFML 2.5 o superiore \cite{bib:SFML} e ROOT \cite{bib:ROOT}. Il programma è stato testato su Ubuntu 18.04 LTS e Ubuntu 20.04 LTS. Si suggerisce di utilizzare quest'ultima versione, se possibile, per via della maggior compatibilità con SFML 2.5.
 
 L'eseguibile del main viene generato nella cartella build/, mentre i test in build/tests. Per eseguire il programma è quindi sufficiente spostarsi nella directory di build e digitare
 
