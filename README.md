@@ -1,7 +1,8 @@
 # SIR Simulation
 
-![alt text](https://github.com/lorenzomanini/SIR_simulation/blob/master/tex/images/xkcd.png?raw=true)
+![alt text](https://imgs.xkcd.com/comics/physicists.png?raw=true)
 
+https://xkcd.com/793/
 
 # Building
 
