@@ -1,5 +1,7 @@
 # SIR Simulation
 
+![alt text](https://github.com/lorenzomanini/SIR_simulation/blob/master/tex/images/xkcd.png?raw=true)
+
 
 # Building
 
