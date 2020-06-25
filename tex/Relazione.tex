@@ -136,10 +136,13 @@ Introducendo un periodo di incubazione si ottiene il grafico in fig. \ref{fig:in
 \end{figure*}
 
 \section{Strategia di testing}
-Per testare la correttezza del programma si è utilizzato Doctest. Si è scelto di testare esplicitamente solo le classi \emph{Motion} e \emph{Infection}, dato che costituiscono il cuore del programma e sono le più suscettibili ad errori. Per le classi \emph{Display} e \emph{Plot}, che gestiscono l'output grafico, ci si è limitati a verificarne il corretto funzionamento durante l'esecuzione del programma.
+Per testare la correttezza del programma si è utilizzato Doctest. Si è scelto di testare esplicitamente solo le classi \emph{Motion} e \emph{Infection} e il costruttore di \emph{Simulation State}, dato che costituiscono il cuore del programma e sono le più suscettibili ad errori. Per le classi \emph{Display} e \emph{Plot}, che gestiscono l'output grafico, ci si è limitati a verificarne il corretto funzionamento durante l'esecuzione del programma.
+
+\subsection*{Simulation State}
+Nel testare il costruttore di \emph{Simulation State} si è verificato che esso generasse persone all'interno dei confini e con velocità nulla. Inoltre, calcolando la media delle posizioni, è stato verificato che la popolazione fosse distribuita uniformemente nello spazio.
 
 \subsection*{Motion}
-Per testare la classe \emph{Motion}, si è creata un'istanza con deviazione standard nulla, così da poter prevedere lo spostamento delle persone. Si è poi generata una popolazione di un solo individuo e si è verificato che la posizione venisse aggiornata correttamente, tenendo conto della velocità iniziale, della presenza dell'attrito e degli urti con le pareti. In seguito si è creata una seconda istanza di \emph{Motion} con deviazione standard non nulla e si è controllato che le medie delle posizioni, velocità e accelerazioni della popolazione fossero compatibili con una distribuzione delle accelerazioni di media zero.
+Per testare la classe \emph{Random Motion}, si è creata un'istanza con deviazione standard nulla, così da poter prevedere lo spostamento delle persone. Si è poi generata una popolazione di un solo individuo e si è verificato che la posizione venisse aggiornata correttamente, tenendo conto della velocità iniziale, della presenza dell'attrito e degli urti con le pareti. In seguito si è creata una seconda istanza di \emph{Random Motion} con deviazione standard non nulla e si è controllato che le medie delle posizioni, velocità e accelerazioni della popolazione fossero compatibili con una distribuzione delle accelerazioni di media zero.
 
 \subsection*{Infection}
 Le due classi che gestiscono l'infezione sono state testate con popolazioni ridotte, senza aggiornare la posizione degli individui. Gli individui sono stati distanziati in modo da poter prevedere i contatti e i parametri probabilistici delle classi sono stati impostati in modo da generare eventi certi o impossibili. Si è poi verificato che i contagi avvenissero come previsto, controllando sia la composizione dei vettori sia il \emph{Sub Status} degli individui.

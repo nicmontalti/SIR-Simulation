@@ -2,6 +2,10 @@ include_directories(${PROJECT_SOURCE_DIR}/include)
 add_compile_options(-Wall -Wextra -fsanitize=address)
 add_link_options(-fsanitize=address)
 
+add_executable(run_simulation_state_tests simulation_state.test.cpp run_tests.cpp)
+target_link_libraries(run_simulation_state_tests simulation)
+target_link_libraries(run_simulation_state_tests ROOT::MathCore)
+add_test(NAME simulation_state_tests COMMAND run_simulation_state_tests)
 
 add_executable(run_motion_tests motion.test.cpp run_tests.cpp)
 target_link_libraries(run_motion_tests simulation random_motion)

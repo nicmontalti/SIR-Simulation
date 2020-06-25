@@ -4,16 +4,16 @@
 
 using namespace sir;
 
-int constexpr size = 100;
-double constexpr sd_motion = 0.;
-
-People people{Person{Position{0., 0.}, Velocity{0., 0.}}};
-Population population{people, People(), People()};
-Simulation_State state(size, population);
-Random_Motion motion{sd_motion};
-
 TEST_CASE("Testing motion")
 {
+  int constexpr size = 100;
+  double constexpr sd_motion = 0.;
+
+  People people{Person{Position{0., 0.}, Velocity{0., 0.}}};
+  Population population{people, People(), People()};
+  Simulation_State state(size, population);
+  Random_Motion motion{sd_motion};
+
   SUBCASE("no acceleration (sd = 0)")
   {
     CHECK(state.population.S[0].position.x == doctest::Approx(0.));
@@ -89,56 +89,48 @@ TEST_CASE("Testing motion")
     CHECK(state.population.S[0].position.x <= state.size);
     CHECK(state.population.S[0].position.x <= state.size);
   }
-}
 
-int constexpr S = 200;
-int constexpr I = 0;
-int constexpr R = 0;
-int constexpr sd_motion_2 = 1.;
+  int constexpr S = 200;
+  int constexpr I = 0;
+  int constexpr R = 0;
+  int constexpr sd_motion_2 = 1.;
 
-Simulation_State state_2(size, S, I, R);
-Random_Motion motion_2{sd_motion_2};
+  Simulation_State state_2(size, S, I, R);
+  Random_Motion motion_2{sd_motion_2};
 
-double mean()
-{
-  double sum = 0.;
-  for (Person const& person : state_2.population.S) {
-    sum += person.position.x;
-    sum += person.position.y;
-  }
-  int N = state_2.population.S.size() * 2;
-  return (sum / N);
-}
+  SUBCASE("Testing motion position, velocity and acceleration mean")
+  {
+    for (int i = 0; i != 10; ++i) {
+      Simulation_State previous_state = state_2;
+      double position_sum = 0.;
+      double displacement_sum = 0.;
+      double velocity_sum = 0.;
+      double acceleration_sum = 0.;
 
-TEST_CASE("Testing motion position, velocity and acceleration mean")
-{
-  CHECK(mean() == doctest::Approx(size / 2).epsilon(0.1));
-  for (int i = 0; i != 10; ++i) {
-    Simulation_State previous_state = state_2;
-    motion_2.update(state_2.population, state_2.size);
-    CHECK(mean() == doctest::Approx(size / 2).epsilon(0.1));
+      motion_2.update(state_2.population, state_2.size);
 
-    double displacement_sum = 0.;
-    double velocity_sum = 0.;
-    double acceleration_sum = 0.;
+      for (int i = 0; i != S; ++i) {
+        position_sum += state_2.population.S[i].position.x;
+        position_sum += state_2.population.S[i].position.y;
 
-    for (int i = 0; i != S; ++i) {
-      displacement_sum += state_2.population.S[i].position.x -
-                          previous_state.population.S[i].position.x;
-      displacement_sum += state_2.population.S[i].position.y -
-                          previous_state.population.S[i].position.y;
+        displacement_sum += state_2.population.S[i].position.x -
+                            previous_state.population.S[i].position.x;
+        displacement_sum += state_2.population.S[i].position.y -
+                            previous_state.population.S[i].position.y;
 
-      velocity_sum += state_2.population.S[i].velocity.vx;
-      velocity_sum += state_2.population.S[i].velocity.vy;
+        velocity_sum += state_2.population.S[i].velocity.vx;
+        velocity_sum += state_2.population.S[i].velocity.vy;
 
-      acceleration_sum += state_2.population.S[i].velocity.vx -
-                          previous_state.population.S[i].velocity.vx;
-      acceleration_sum += state_2.population.S[i].velocity.vy -
-                          previous_state.population.S[i].velocity.vy;
+        acceleration_sum += state_2.population.S[i].velocity.vx -
+                            previous_state.population.S[i].velocity.vx;
+        acceleration_sum += state_2.population.S[i].velocity.vy -
+                            previous_state.population.S[i].velocity.vy;
+      }
+
+      CHECK(position_sum / (2 * S) == doctest::Approx(size / 2).epsilon(1.));
+      CHECK(displacement_sum / (2 * S) == doctest::Approx(0.).epsilon(1.));
+      CHECK(velocity_sum / (2 * S) == doctest::Approx(0.).epsilon(1.));
+      CHECK(acceleration_sum / (2 * S) == doctest::Approx(0.).epsilon(1.));
     }
-
-    CHECK(displacement_sum / (2 * S) == doctest::Approx(0.).epsilon(1.));
-    CHECK(velocity_sum / (2 * S) == doctest::Approx(0.).epsilon(1.));
-    CHECK(acceleration_sum / (2 * S) == doctest::Approx(0.).epsilon(1.));
   }
 }
