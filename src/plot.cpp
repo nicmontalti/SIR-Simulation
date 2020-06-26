@@ -63,19 +63,13 @@ void Plot::update()
 
   multi_graph_.GetXaxis()->SetRange(0., state_.ticks);
 
-  update_canvas();
-}
-
-void Plot::update_canvas()
-{
   canvas_.Update();
-
   // process interactions with the application
   // (click, menu, close...)
   gSystem->ProcessEvents();
 }
 
-void Plot::save()
+void Plot::save() const
 {
   TFile root_file("SIR_graph.root", "recreate");
   multi_graph_.Write();
@@ -94,4 +88,5 @@ void Plot::save()
     R_graph_.GetPoint(i, x, y);
     csv_file << y << '\n';
   }
+  csv_file.close();
 }

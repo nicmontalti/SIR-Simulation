@@ -16,7 +16,7 @@ float constexpr mean_recovery_ticks = 200.f;
 float constexpr sd_recovery_ticks = 50.f;
 float constexpr circle_radius = 5.f;
 int constexpr incubation_ticks = 50;
-double constexpr motion_std = 0.1;
+double constexpr motion_std = 0.2;
 float constexpr quarantine_probability = 0.005f;
 
 int main()

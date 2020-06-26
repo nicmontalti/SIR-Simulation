@@ -40,8 +40,6 @@ void Simple_Infection::sane_to_infected(Population& population)
 {
   auto it_sane = population.S.begin();
 
-  int n_infected_to_check = population.I.size();
-
   auto check_infection = [&](Person const& infected) {
     if (distance(*it_sane, infected) < limiting_distance_) {
       return random_gen_.Uniform(1.f) < infection_probability_;
@@ -50,6 +48,7 @@ void Simple_Infection::sane_to_infected(Population& population)
   };
 
   auto last_sane = population.S.end();
+  int n_infected_to_check = population.I.size();
 
   while (it_sane != last_sane) {
     auto first_to_check = population.I.begin();

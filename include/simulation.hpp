@@ -33,11 +33,13 @@ class Simulation
   G_Infection& infection_;
 
  public:
-  Simulation(Simulation_State& state, G_Motion& motion, G_Infection& infection);
+  Simulation(Simulation_State const& state,
+             G_Motion& motion,
+             G_Infection& infection);
 
   void update();
 
-  bool is_over()
+  bool is_over() const
   {
     return state_.population.I.size() == 0;
   }

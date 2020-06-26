@@ -63,7 +63,7 @@ bool Simulation_State::check_everyone_position() const
          check_people_position(population.R);
 }
 
-Simulation::Simulation(Simulation_State& state,
+Simulation::Simulation(Simulation_State const& state,
                        G_Motion& motion,
                        G_Infection& infection)
     : state_{state}, motion_{motion}, infection_{infection}
@@ -75,7 +75,7 @@ Simulation::Simulation(Simulation_State& state,
 void Simulation::update()
 {
   motion_.update(state_.population, state_.size);
-  assert(state_.check_everyone_position());
   infection_.update(state_.population, state_.ticks);
+  assert(state_.check_everyone_position());
   ++state_.ticks;
 }

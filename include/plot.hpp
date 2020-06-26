@@ -25,7 +25,6 @@ class Plot
   TMultiGraph multi_graph_;
 
   void init_graph(TGraph& graph, int color);
-  void update_canvas();
 
  public:
   Plot(Simulation_State const& state);
@@ -37,7 +36,7 @@ class Plot
   }
 
   void update();
-  void save();
+  void save() const;
 };
 
 }  // namespace sir

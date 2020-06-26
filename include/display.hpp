@@ -22,7 +22,7 @@ class Display
  public:
   Display(Simulation_State const& state, float circle_radius);
   bool update();
-  bool is_open()
+  bool is_open() const
   {
     return window_.isOpen();
   }

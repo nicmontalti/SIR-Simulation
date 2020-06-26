@@ -9,6 +9,12 @@ void Random_Motion::update(Population& population, int size)
     person.velocity.vx += random_generator_.Gaus(0., sd_);
     person.velocity.vy += random_generator_.Gaus(0., sd_);
 
+    // Friction
+    person.velocity.vx -=
+        std::abs(person.velocity.vx) * person.velocity.vx / 10000;
+    person.velocity.vy -=
+        std::abs(person.velocity.vy) * person.velocity.vy / 10000;
+
     person.position.x += person.velocity.vx;
     person.position.y += person.velocity.vy;
 
