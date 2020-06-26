@@ -22,11 +22,11 @@ Il progetto consiste in una libreria dedicata allo sviluppo di simulazioni basat
 \subsection*{Organizzazione del codice}
 Il codice è stato sviluppato collaborando su GitHub. La repository è stata resa pubblica ed è liberamente consultabile al link in bibliografia \cite{bib:GitHub}.
 
-Il sorgente è suddiviso in tre cartelle: include, src e tests. Le dichiarazioni delle classi sono contenute negli header all'interno di include/, mentre la loro implementazione è nei cpp contenuti in src/. Tutti i file utili al testing sono invece raggruppati in tests/. Infine, una copia di questa relazione è contenuta nella cartella tex/.
+Il sorgente è suddiviso in tre cartelle: include, src e tests. Le dichiarazioni delle classi sono contenute negli header all'interno di include, mentre la loro implementazione è nei cpp contenuti in src. Tutti i file utili al testing sono raggruppati in tests. Una copia di questa relazione è contenuta nella cartella tex.
 
 \subsection*{Struttura del programma}
 \subsubsection*{Popolazione}
-La simulazione ha come “attori” istanze di \emph{Person}. Una \emph{Person} contiene una posizione, una velocità ed alcune informazioni relative allo stato di infezione. In particolare, la variabile membro \emph{Sub Status} è un enumeratore che definisce una sotto categoria di S, I o R. Ad esempio, gli infetti sono divisi in \emph{incubation}, per i quali il virus è ancora nella fase di incubazione, \emph{infective}, cioè in grado di infettare altre persone, e \emph{quarantined}, cioè in quarantena. Ogni \emph{Person} è contenuta in un std::vector<Person>, che ha come alias \emph{People}. Infine, lo struct \emph{Population}, che rappresenta l’intera popolazione, contiene tre oggetti \emph{People} denominati rispettivamente S, I e R. I \emph{Person} contenuti in S sono considerati sani, quelli contenuti in I infetti e quelli in R recuperati.
+La simulazione ha come “attori” istanze di \emph{Person}. Una \emph{Person} contiene una posizione, una velocità ed alcune informazioni relative allo stato di infezione. In particolare la variabile membro \emph{Sub Status} è un enumeratore che definisce una sottocategoria di S, I o R. Ad esempio gli infetti sono divisi in \emph{incubation}, quando il virus è ancora nella fase di incubazione, \emph{infective}, se in grado di infettare altre persone, e \emph{quarantined}, cioè in quarantena. Ogni \emph{Person} è contenuta in un std::vector<Person>, che ha come alias \emph{People}. Infine lo struct \emph{Population}, che rappresenta l’intera popolazione, contiene tre oggetti \emph{People} denominati rispettivamente S, I e R. I \emph{Person} contenuti in S sono considerati sani, quelli contenuti in I infetti e quelli in R recuperati.
 
 \subsubsection*{Simulazione}
 La classe che permette all’utente di creare e far avanzare la simulazione è \emph{Simulation}. La classe ha tre variabili membro private, che vengono inizializzate dal costruttore:
@@ -36,16 +36,16 @@ La classe che permette all’utente di creare e far avanzare la simulazione è \
     \item \emph{G\_Infection}\& infection: referenza al modulo che implementa l’evoluzione dell’infezione
 \end{itemize}
 
-\emph{Simulation State} è uno struct che contiene un’istanza di \emph{Population}, la dimensione dello spazio della simulazione e il tempo a cui fa riferimento quello stato. Lo spazio in cui avviene la simulazione è stato modellizzato come un piano cartesiano di estremi 0 e \emph{size} su entrambi gli assi; una persona in un \emph{Simulation State} deve sempre trovarsi all’interno di questo spazio. Il tempo è invece stato discretizzato in ticks interi; i ticks di un \emph{Simulation State} non possono diminuire.
+\emph{Simulation State} è uno struct che contiene un’istanza di \emph{Population}, la dimensione dello spazio della simulazione e il tempo a cui fa riferimento quello stato. Lo spazio in cui avviene la simulazione è stato modellizzato con un piano cartesiano finito, di estremi 0 e \emph{size}. Una persona in un \emph{Simulation State} deve sempre trovarsi all’interno di questo spazio. Il tempo è stato discretizzato in ticks interi; i ticks di un \emph{Simulation State} non possono diminuire.
 
 \subsubsection*{Movimento ed infezione}
 \emph{G Motion} e \emph{G Infection} sono classi astratte, nelle quali è dichiarata una funzione membro pubblica virtuale \emph{update}.
 
-Una implementazione di \emph{G Motion}, quando viene chiamato \emph{update(Population}\& \emph{population, int size)}, deve aggiornare la posizione dei \emph{Person} contenuti nella referenza \emph{population}. La nostra libreria fornisce \emph{Random Motion}. Essa estrae un'accelerazione da una distribuzione normale di media zero ed aggiorna la posizione delle persone di conseguenza.
+Un'implementazione di \emph{G Motion}, quando viene chiamato \emph{update(Population}\& \emph{population, int size)}, deve aggiornare la posizione dei \emph{Person} contenuti nella referenza \emph{population}. La nostra libreria fornisce \emph{Random Motion}. Essa estrae un'accelerazione da una distribuzione normale di media zero ed aggiorna la posizione delle persone di conseguenza.
 
-Una implementazione di \emph{G Infection}, quando viene chiamato \emph{update(Population}\& \emph{population, int ticks)}, deve far progredire l’infezione. Questo avviene spostando i \emph{Person} tra i vari \emph{People} (S, I, R) e aggiornando le variabili membro dedicate dei \emph{Person}. La libreria fornisce \emph{Simple Infection} e \emph{Incubation Infection}. In \emph{Simple Infection}, ogni volta che un individuo sano viene a trovarsi a una distanza minore della distanza limite da un infettivo, esso ha una certa probabilità di infettarsi. Al momento dell'infezione alla persona viene assegnato un tempo di recupero, sorteggiato da una distribuzione normale. Trascorso questo tempo, l'individuo passa allo stato \emph{recovered}.
+Un'implementazione di \emph{G Infection}, quando viene chiamato \emph{update(Population}\& \emph{population, int ticks)}, deve far progredire l’infezione. Questo avviene spostando i \emph{Person} tra i vari \emph{People} (S, I, R) e aggiornando le variabili membro dedicate dei \emph{Person}. La libreria fornisce \emph{Simple Infection} e \emph{Incubation Infection}. In \emph{Simple Infection} ogni volta che un individuo sano viene a trovarsi a una distanza minore della distanza limite da un infettivo ha una certa probabilità di infettarsi. Al momento dell'infezione alla persona viene assegnato un tempo di recupero, sorteggiato da una distribuzione normale. Trascorso questo tempo, l'individuo passa allo stato \emph{recovered}.
 
-La variante \emph{Incubation Infection} funziona in modo analogo a \emph{Simple Infection}. Essa però contiene anche un tempo di incubazione, durante il quale l'individuo è infetto ma non infettivo. Inoltre, ad ogni chiamata di \emph{update}, gli infettivi hanno una certa probabilità di essere individuati e costretti alla quarantena, durante la quale non possono contagiare altre persone.
+La variante \emph{Incubation Infection} funziona in modo analogo. Essa contiene anche un tempo di incubazione, durante il quale l'individuo è infetto ma non infettivo. Inoltre, ad ogni chiamata di \emph{update}, gli infettivi hanno una certa probabilità di essere individuati e costretti alla quarantena, durante la quale non possono contagiare altre persone.
 
 \subsubsection*{Main}
 Prima di inizializzare un’istanza di \emph{Simulation}, l’utente deve creare un \emph{Simulation State} iniziale e due istanze di classi che implementano rispettivamente \emph{G Motion} e \emph{G Infection}. A questo punto è possibile creare un’istanza di \emph{Simulation} passando i tre oggetti come parametri al costruttore.
@@ -56,7 +56,7 @@ Prima di inizializzare un’istanza di \emph{Simulation}, l’utente deve creare
 \subsubsection*{Output grafico}
 La libreria mette a disposizione due classi per visualizzare l’andamento della simulazione. La spiegazione dettagliata degli output, con alcuni esempi, è fornita nella sezione Risultati.
 
-Le due classi che gestiscono la grafica sono \emph{Display} e \emph{Plot}. \emph{Display}, basata sulla libreria grafica SFML, permette di visualizzare i \emph{Person} come cerchi colorati che si muovono in un piano. Un'immagine di esempio è consultabile in fig. \ref{fig:display}. \emph{Plot}, basata sul framework di ROOT, permette invece di visualizzare in tempo reale un grafico con l’andamento del numero di sani, infetti e recuperati. Tramite la funzione membro \emph{Plot::save()} è inoltre possibile salvare il grafico come RootFile e i dati dell’andamento come csv. Nelle figure \ref{fig:simple} - \ref{fig:incubation} sono consultabili alcuni esempi.
+Le due classi che gestiscono la grafica sono \emph{Display} e \emph{Plot}. \emph{Display}, basata sulla libreria grafica SFML, permette di visualizzare i \emph{Person} come cerchi colorati che si muovono in un piano. \emph{Plot}, basata sul framework di ROOT, permette invece di visualizzare in tempo reale un grafico con l’andamento del numero di sani, infetti e recuperati. Tramite la funzione membro \emph{Plot::save()} è inoltre possibile salvare il grafico come RootFile e i dati dell’andamento come csv.
 
 Entrambe le classi funzionano in modo analogo. È necessario passare al costruttore una referenza costante allo stato della simulazione da visualizzare. Questa è ottenibile tramite la funzione membro \emph{Simulation::get\_state()}. Dopodiché, per aggiornare ciò che viene mostrato, è sufficiente chiamare rispettivamente \emph{Display::update()} e \emph{Plot::update()}.
 
@@ -71,27 +71,27 @@ La compilazione è gestita tramite CMake. Per compilare il codice è sufficiente
     make
 \end{verbatim}
 
-Affinché la compilazione abbia successo, è necessario avere installato sulla propria macchina CMake 3.16 o superiore \cite{bib:CMake}, SFML 2.5 o superiore \cite{bib:SFML} e ROOT \cite{bib:ROOT}. Il programma è stato testato su Ubuntu 18.04 LTS e Ubuntu 20.04 LTS. Si suggerisce di utilizzare quest'ultima versione, se possibile, per via della maggior compatibilità con SFML 2.5.
+Affinché la compilazione abbia successo è necessario avere installato CMake 3.16 o superiore \cite{bib:CMake}, SFML 2.5 o superiore \cite{bib:SFML} e ROOT \cite{bib:ROOT} sulla propria macchina. Il programma è stato testato su Ubuntu 18.04 LTS e Ubuntu 20.04 LTS. Si suggerisce di utilizzare quest'ultima versione per via della maggior compatibilità con SFML 2.5.
 
-L'eseguibile del main viene generato nella cartella build/, mentre i test in build/tests. Per eseguire il programma è quindi sufficiente spostarsi nella directory di build e digitare
+L'eseguibile del main viene generato nella cartella build, mentre i test in build/tests. Per eseguire il programma è quindi sufficiente spostarsi nella directory di build e digitare
 
 \begin{verbatim}
     ./SIR_simulation
 \end{verbatim}
 
-Si apriranno due finestre, una con la schematizzazione delle persone e una con i grafici. Chiudendo la finestra dei grafici si termina l'intera applicazione. D'altra parte, chiudendo quella con la popolazione si interrompe la sola simulazione, lasciando la possibilità di interagire con ROOT per eseguire un fit o per salvare i dati.
+Si apriranno due finestre: una con la schematizzazione delle persone e una con i grafici. Chiudendo la finestra dei grafici si termina l'intera applicazione. D'altra parte, chiudendo quella con la popolazione si interrompe la sola simulazione, lasciando la possibilità di interagire con ROOT per eseguire un fit o per salvare i dati.
 
-I test possono essere eseguiti singolarmente, a partire dagli eseguibili generati in build/tests/, o collettivamente con
+I test possono essere eseguiti singolarmente a partire dagli eseguibili generati in build/tests/ o collettivamente con
 
 \begin{verbatim}
     make test
 \end{verbatim}
 
-Eseguendo il codice con l'address sanitizer abilitato, si è notato che la terminazione della applicazione da parte di ROOT comporta dei memory leak. Si è concluso che essi siano dovuti a librerie esterne, in particolare a libfontconfig. Il problema sembra circoscritto alla classe \emph{Plot}.
+Eseguendo il codice con l'address sanitizer abilitato, si è notato che la terminazione dell'applicazione da parte di ROOT comporta dei memory leak. Si è concluso che essi siano dovuti a librerie esterne, in particolare a libfontconfig. Il problema sembra circoscritto alla classe \emph{Plot}.
 
 \section{Risultati}
 \label{sec:risultati}
-L'applicazione restituisce due tipi di output grafici. Nella prima finestra vengono mostrate le persone, schematizzate come cerchi colorati, che si muovono in uno spazio quadrato. Lo stato delle persone è indicato con colori diversi: verde per i sani, rosso per gli infettivi, arancione se il virus è in incubazione, bianco per la quarantena e blu per i recuperati. Un'immagine d'esempio è mostrata in fig. \ref{fig:display}. Contemporaneamente, in una seconda finestra, viene mostrato un grafico aggiornato in tempo reale in cui viene plottato il numero di sani, infetti e recuperati.
+L'applicazione restituisce due tipi di output grafici. Nella prima finestra vengono mostrate le persone, schematizzate come cerchi colorati, che si muovono in uno spazio quadrato. Lo stato delle persone è indicato con colori diversi: verde per i sani, rosso per gli infettivi, arancione se il virus è in incubazione, bianco per la quarantena e blu per i recuperati. Un'immagine d'esempio è mostrata in fig. \ref{fig:display}. Contemporaneamente in una seconda finestra viene mostrato un grafico aggiornato in tempo reale in cui viene plottato il numero di sani, infetti e recuperati.
 
 \begin{figure}
     \includegraphics[width=\linewidth]{images/display.png}
@@ -99,17 +99,17 @@ L'applicazione restituisce due tipi di output grafici. Nella prima finestra veng
     \label{fig:display}
 \end{figure}
 
-Di seguito vengono riportati gli esiti di alcune simulazioni effettuate variando i parametri delle classi \emph{Infection} e \emph{Motion}. Se non diversamente indicato, i parametri  dello stato iniziale sono size = 600, S = 400, I = 10 e  R = 0. Si è scelto di iniziare la simulazione con 10 individui infettivi per velocizzarne l'esecuzione. Inoltre si è notato che  con un solo infetto può capitare che questo guarisca prima di infettare altre persone. Quest'ultimo caso, sebbene possibile, è stato ritenuto di scarso interesse.
+Di seguito vengono riportati gli esiti di alcune simulazioni effettuate variando i parametri delle classi \emph{Infection} e \emph{Motion}. Se non diversamente indicato i parametri  dello stato iniziale sono size = 600, S = 400, I = 10 e  R = 0. Si è scelto di iniziare la simulazione con 10 individui infettivi per velocizzarne l'esecuzione. Inoltre si è notato che  con un solo infetto può capitare che questo guarisca prima di infettare altre persone. Quest'ultimo caso, sebbene possibile, è stato ritenuto di scarso interesse.
 
 La classe \emph{Random Motion} è stata inizializzata con una deviazione standard pari a 0.2. Si è notato che variare questo parametro influisce poco sulla simulazione. L'unica differenza apprezzabile è nella durata dell'epidemia, che diminuisce all'aumentare della varianza.
 
-La classe \emph{Simple Infection} è stata inizializzata con una distanza critica di 10, una probabilità di infezione di 0.05 e un tempo di recupero di media 200 e deviazione standard 50. Inoltre, alla variante \emph{Incubation Infection}, si sono assegnati un tempo di incubazione di 50 e una probabilità di essere costretti alla quarantena di 0.005.
+La classe \emph{Simple Infection} è stata inizializzata con una distanza critica di 10, una probabilità di infezione di 0.05 e un tempo di recupero di media 200 e deviazione standard 50. Alla variante \emph{Incubation Infection} si sono assegnati un tempo di incubazione di 50 e una probabilità di essere costretti alla quarantena di 0.005.
 
 L'esito di una simulazione con i parametri sopra descritti e la classe \emph{Simple Infection} a gestire l'infezione è riportato in fig. \ref{fig:simple_005}. In fig. \ref{fig:simple_008} si può vedere come aumentando la probabilità di infezione a 0.08 il picco si alzi sensibilmente.
 
 Diminuire la size da 600 a 400, come mostrato in fig. \ref{fig:simple_400}, determina un'epidemia molto più violenta, con un picco alto e la totalità della popolazione che contrae il virus. Aumentarla a 800 (fig. \ref{fig:simple_800}), simulando una sorta di distanziamento sociale, provoca invece l'effetto opposto.
 
-Introducendo un periodo di incubazione si ottiene il grafico in fig. \ref{fig:no_quarantine}, in cui si può notare come l'intensità dell'epidemia sia più modesta. Infine, aggiungendo la possibilità di essere costretti alla quarantena, si ottiene il grafico in fig. \ref{fig:quarantine}, in cui il numero di infetti è costantemente sotto controllo e il numero finale di individui che non contraggono il virus consistente. Inoltre, il tempo di durata dell'epidemia è più del doppio di quello della versione senza quarantena.
+Introducendo un periodo di incubazione si ottiene il grafico in fig. \ref{fig:no_quarantine}, in cui si può notare come l'intensità dell'epidemia sia più modesta. Aggiungendo la possibilità di essere costretti alla quarantena si ottiene il grafico in fig. \ref{fig:quarantine}, in cui il numero di infetti è costantemente sotto controllo e il numero finale di individui che non contraggono il virus consistente. Inoltre il tempo di durata dell'epidemia è più del doppio di quello della versione senza quarantena.
 
 \begin{figure*}[p]
     \centering
