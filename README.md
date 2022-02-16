@@ -1,7 +1,7 @@
 # SIR Simulation
 # Building
 
-Compilation is handled by CMake. To compile the code, it is necessary to create a build directory, generate the MakeFile through CMake and execute make
+Compilation is handled by CMake. To compile the code, it is necessary to create a build directory, generate the MakeFile through CMake and execute `make`
 
 ## Prerequisites
 
@@ -16,6 +16,9 @@ Compilation is handled by CMake. To compile the code, it is necessary to create 
     make
 
     ./SIR_simulation
+    
+## Documentation
+The full documentation can be found in the `\tex` directory (in Italian)
 
 
 ![alt text](https://imgs.xkcd.com/comics/physicists.png?raw=true)
