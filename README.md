@@ -1,9 +1,9 @@
 # SIR Simulation
 # Building
 
-La compilazione è gestita tramite CMake. Per compilare il codice è sufficiente creare una directory di build, generare il Makefile tramite CMake e compilare con make.
+Compilation is handled by CMake. To compile the code, it is necessary to create a build directory, generate the MakeFile through CMake and execute make
 
-## Prerequisiti
+## Prerequisites
 
  - CMake 3.16+
  - SFML 2.5+
