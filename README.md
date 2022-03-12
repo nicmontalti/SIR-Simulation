@@ -18,7 +18,7 @@ Compilation is handled by CMake. To compile the code, it is necessary to create 
     ./SIR_simulation
     
 ## Documentation
-The full documentation can be found in the `\tex` directory (in Italian)
+The full documentation with some examples can be found in the `\tex` directory (in Italian)
 
 
 ![alt text](https://imgs.xkcd.com/comics/physicists.png?raw=true)
