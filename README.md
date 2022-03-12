@@ -6,8 +6,8 @@ Compilation is handled by CMake. To compile the code, it is necessary to create 
 ## Prerequisites
 
  - CMake 3.16+
- - SFML 2.5+
- - ROOT
+ - SFML 2.5+       (https://www.sfml-dev.org/)
+ - ROOT            (https://root.cern/)
 
 ## Building and running
     mkdir build
